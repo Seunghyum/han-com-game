@@ -10,7 +10,7 @@ module.exports = {
   },
   resolve: {
     modules: ['node_modules'],
-    extensions: ['*'],
+    extensions: ['*', '.js'],
     alias: {
       '~src': join(__dirname, '../src'),
     },

@@ -6,11 +6,12 @@
       "es6": true,
       "node": true
   },
-  "ignorePatterns": ["node_modules/"],
+  "ignorePatterns": ["node_modules/", "test/"],
   "rules": {
     "prettier/prettier": "error"
   },
   "parserOptions": {
-      "ecmaVersion": 2017
+      "ecmaVersion": 2017,
+      "sourceType": "module"
   }
 }
