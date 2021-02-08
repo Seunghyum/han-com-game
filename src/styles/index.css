@@ -33,8 +33,33 @@ a, button {
   min-width: 100px;
   background-color: #47a1f8;
   border: 0px;
-  border-radius: 8px;
   padding: 12px;
   margin: auto;
   color: white;
+}
+
+.game-control__input {
+  display: block;
+  min-width: 180px;
+  background-color: #47a1f8;
+  border: 0px;
+  border-radius: 12px;
+  padding: 12px;
+  margin: auto;
+  margin-bottom: 18px;
+  color: white;
+  text-align: center;
+}
+.game-control__input::placeholder {
+  color: white;
+}
+.game-control__input:focus::placeholder {
+  opacity: 0;
+}
+::-webkit-input-placeholder, 
+:-moz-placeholder, /* Firefox 18- */
+::-moz-placeholder, /* Firefox 19+ */
+:-ms-input-placeholder {  
+  text-align: center; 
+  color: white
 }

@@ -1,5 +1,5 @@
 import { historyRouter, ROUTE_PATH } from '~src/router';
-import { div, p, h1, a, span, button } from '~utils/vDom';
+import { div, p, h1, a, span, button, input } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getFetch } from '~api/fetch';
 
@@ -11,25 +11,33 @@ class GamePage {
     this.questions = [];
     this.qIndex = 0;
     this.score = 0;
-    this.$questionText = p({ className: 'question-text' });
+    this.$questionText = p({ className: 'question-text' }, '문제 단어');
     this.$time = span({ className: 'question-board__time' }, '-');
     this.$score = span({ className: 'question-board__score' }, '-');
-    this.$startBtn = button(
+    this.$gameControlBtn = button(
       {
         type: 'button',
         className: 'game-control__button',
       },
       '시작'
     );
+    this.$gameInput = input({
+      type: 'test',
+      className: 'game-control__input',
+      placeholder: '입력',
+    });
   }
 
   setNextQuestion(qIndex) {
+    this.qIndex = qIndex;
     this.timer.finish();
+    this.$gameInput.value = '';
     if (this.questions.length - 1 < qIndex)
       return historyRouter(ROUTE_PATH.ScorePage);
 
     const { text: question, second } = this.questions[qIndex];
     this.$questionText.textContent = question;
+
     this.$score.textContent = this.score;
     this.timer.start(second, (time) => {
       this.$time.textContent = time;
@@ -40,36 +48,48 @@ class GamePage {
     });
   }
 
-  async handleStartBtn(self) {
-    if (self.isStarted) {
-      self.$startBtn.textContent = '시작';
-      self.timer.finish();
+  async handleStartBtn() {
+    if (this.isStarted) {
+      this.$gameControlBtn.textContent = '시작';
+      this.timer.finish();
     } else {
-      self.$startBtn.textContent = '초기화';
+      this.$gameControlBtn.textContent = '초기화';
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
         );
-        self.questions = result;
-        self.score = result.length;
-        self.$score.textContent = self.score;
-        self.setNextQuestion(0);
+        this.questions = result;
+        this.score = result.length;
+        this.$score.textContent = this.score;
+        this.setNextQuestion(0);
       } catch (err) {
         alert('네트워크 연결이 안됩니다.');
       }
     }
-    self.isStarted = !self.isStarted;
+    this.isStarted = !this.isStarted;
+  }
+
+  handleInputKeyUp(event) {
+    if (event.key !== 'Enter') return;
+    if (event.target.value !== this.questions[this.qIndex].text) return;
+    this.setNextQuestion(this.qIndex + 1);
   }
 
   render() {
-    const self = this;
-    const { $time, $score, $questionText, $startBtn, handleStartBtn } = this;
-
-    $questionText.textContent = '문제 단어';
+    const {
+      $time,
+      $score,
+      $questionText,
+      $gameControlBtn,
+      $gameInput,
+      handleStartBtn,
+      handleInputKeyUp,
+    } = this;
 
     if (!this.isMount) {
       this.isMount = true;
-      this.$startBtn.onclick = () => handleStartBtn(self);
+      $gameControlBtn.onclick = handleStartBtn.bind(this);
+      $gameInput.onkeyup = handleInputKeyUp.bind(this);
 
       return div({ className: 'container' }, [
         div([
@@ -97,7 +117,7 @@ class GamePage {
           ]),
           $questionText,
         ]),
-        div({ className: 'game-control' }, $startBtn),
+        div({ className: 'game-control' }, [$gameInput, $gameControlBtn]),
       ]);
     }
   }
