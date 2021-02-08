@@ -1,20 +1,20 @@
-const { HotModuleReplacementPlugin } = require("webpack");
-const { merge } = require("webpack-merge");
-const base = require("./webpack.config.base.js");
-const { join } = require("path");
+const { HotModuleReplacementPlugin } = require('webpack');
+const { merge } = require('webpack-merge');
+const base = require('./webpack.config.base.js');
+const { join } = require('path');
 
 module.exports = merge(base, {
-  mode: "development",
-  devtool: "inline-source-map",
+  mode: 'development',
+  devtool: 'inline-source-map',
   devServer: {
-    contentBase: join(__dirname, "../public"),
+    contentBase: join(__dirname, '../public'),
     inline: true,
     hot: true,
-    host: "localhost",
+    host: 'localhost',
     port: 3000,
     open: true,
     historyApiFallback: {
-      index: "/",
+      index: '/',
     },
   },
   plugins: [new HotModuleReplacementPlugin()],
