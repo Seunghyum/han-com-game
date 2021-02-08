@@ -25,13 +25,7 @@ class Timer {
   }
 
   finish() {
-    clearInterval(this.state.interval);
-  }
-
-  reset(time) {
-    this.state.seconds = time;
-    clearInterval(this.state.interval);
-    this.start();
+    if (this.state.interval) clearInterval(this.state.interval);
   }
 }
 
