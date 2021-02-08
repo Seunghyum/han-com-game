@@ -13,6 +13,11 @@ module.exports = {
     extensions: ['*', '.js'],
     alias: {
       '~src': join(__dirname, '../src'),
+      '~api': join(__dirname, '../src/api'),
+      '~utils': join(__dirname, '../src/utils'),
+      '~pages': join(__dirname, '../src/pages'),
+      '~store': join(__dirname, '../src/store'),
+      '~components': join(__dirname, '../src/components'),
     },
   },
   module: {
