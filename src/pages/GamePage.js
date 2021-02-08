@@ -3,6 +3,12 @@ import { div, p, h1, a, span, button, input } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getFetch } from '~api/fetch';
 
+const initState = {
+  $questionText: '문제 단어',
+  $time: '-',
+  $score: '-',
+};
+
 class GamePage {
   constructor() {
     this.isStarted = false;
@@ -11,9 +17,15 @@ class GamePage {
     this.questions = [];
     this.qIndex = 0;
     this.score = 0;
-    this.$questionText = p({ className: 'question-text' }, '문제 단어');
-    this.$time = span({ className: 'question-board__time' }, '-');
-    this.$score = span({ className: 'question-board__score' }, '-');
+    this.$questionText = p(
+      { className: 'question-text' },
+      initState.$questionText
+    );
+    this.$time = span({ className: 'question-board__time' }, initState.$time);
+    this.$score = span(
+      { className: 'question-board__score' },
+      initState.$score
+    );
     this.$gameControlBtn = button(
       {
         type: 'button',
@@ -52,6 +64,10 @@ class GamePage {
     if (this.isStarted) {
       this.$gameControlBtn.textContent = '시작';
       this.timer.finish();
+      this.$gameInput.value = '';
+      this.$score.textContent = initState.$score;
+      this.$time.textContent = initState.$time;
+      this.$questionText.textContent = initState.$questionText;
     } else {
       this.$gameControlBtn.textContent = '초기화';
       try {
