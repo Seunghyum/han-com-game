@@ -1,11 +1,16 @@
-import GameStartPage from './pages/GamePage';
-import GameEndPage from './pages/ScorePage';
+import GamePage from './pages/GamePage';
+import ScorePage from './pages/ScorePage';
 
 const $app = document.querySelector('#app');
 
+export const ROUTE_PATH = {
+  GamePage: '/',
+  ScorePage: '/score',
+};
+
 const routes = {
-  '/': () => new GameStartPage(),
-  '/score': () => new GameEndPage(),
+  '/': () => new GamePage(),
+  '/score': () => new ScorePage(),
 };
 
 const renderHTML = (route) => {
@@ -13,13 +18,17 @@ const renderHTML = (route) => {
   $app.appendChild(route.render());
 };
 
-export const initRoute = () => {
-  renderHTML(getPath(window.location.pathname));
+export const initRoute = (pathName = window.location.pathname) => {
+  renderHTML(getPath(pathName));
+
+  window.onpopstate = () => {
+    renderHTML(getPath(window.location.pathname));
+  };
 };
 
-export function historyRouter(state, pathName) {
-  window.history.pushState(state, pathName, window.location.origin + pathName);
-  renderHTML(routes[pathName]);
+export function historyRouter(pathName = window.location.pathname) {
+  window.history.pushState({}, '', window.location.origin + pathName);
+  renderHTML(getPath(pathName));
 }
 
-const getPath = (path) => routes[path]();
+const getPath = (pathName) => routes[pathName]();
