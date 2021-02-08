@@ -1,0 +1,40 @@
+body {
+  font-size: 15px;
+}
+
+a, button {
+  cursor: pointer;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+}
+
+.question-board {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px; 
+}
+.question-text {
+  font-size: 48px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+}
+.question-board__time, .question-board__score {
+  font-size: 24px;
+  font-weight: 700;
+}
+.game-control {
+  text-align: center;
+}
+.game-control__button {
+  min-width: 100px;
+  background-color: #47a1f8;
+  border: 0px;
+  border-radius: 8px;
+  padding: 12px;
+  margin: auto;
+  color: white;
+}

@@ -1,5 +1,5 @@
-import GamePage from './pages/GamePage';
-import ScorePage from './pages/ScorePage';
+import GamePage from '~pages/GamePage';
+import ScorePage from '~pages/ScorePage';
 
 const $app = document.querySelector('#app');
 

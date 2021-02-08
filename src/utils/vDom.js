@@ -35,8 +35,10 @@ function makeElement(type, textOrPropsOrChild, ...otherChildren) {
   return el;
 }
 
-export const a = (...args) => makeElement(`a`, ...args);
-export const button = (...args) => makeElement(`button`, ...args);
-export const div = (...args) => makeElement(`div`, ...args);
-export const input = (...args) => makeElement(`input`, ...args);
-export const p = (...args) => makeElement(`p`, ...args);
+export const a = (...args) => makeElement('a', ...args);
+export const button = (...args) => makeElement('button', ...args);
+export const div = (...args) => makeElement('div', ...args);
+export const input = (...args) => makeElement('input', ...args);
+export const p = (...args) => makeElement('p', ...args);
+export const span = (...args) => makeElement('span', ...args);
+export const h1 = (...args) => makeElement('h1', ...args);

@@ -6,6 +6,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
+    '^~utils(.*)$': '<rootDir>/src/utils$1',
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
 };

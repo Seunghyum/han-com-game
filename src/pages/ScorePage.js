@@ -1,4 +1,4 @@
-import { historyRouter, ROUTE_PATH } from '../router';
+import { historyRouter, ROUTE_PATH } from '~src/router';
 class ScorePage {
   render() {
     const div = document.createElement('div');
