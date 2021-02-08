@@ -1,4 +1,4 @@
-import { a, div } from '../utils/vDom';
+import { a, div } from '~utils/vDom';
 
 describe('Virtual Dom 함수 테스트', () => {
   test('params가 첫 요소로 string이 들어갈 경우 해당 Dom의 innerText에 들어간다.', () => {
