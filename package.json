@@ -4,7 +4,7 @@
   "repository": "https://github.com/Seunghyum/TypingGame",
   "author": "Moon Seung Hyun",
   "scripts": {
-    "dev": "webpack serve --open --config ./build/webpack.config.dev.js",
+    "start": "webpack serve --open --config ./build/webpack.config.dev.js",
     "build": "webpack --config ./build/webpack.config.prod.js"
   },
   "devDependencies": {
