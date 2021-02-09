@@ -47,13 +47,17 @@ class GamePage {
     $QuestionText.update({ innerText: question });
     $Score.update({ innerText: this.score });
 
-    this.timer.start(second, (time) => {
-      $Time.update({ innerText: time });
-      if (!time) {
-        this.score -= 1;
-        this.setNextQuestion(qIndex + 1);
-      }
-    });
+    this.timer.start(
+      (time) => {
+        $Time.update({ innerText: time });
+        if (!time) {
+          this.score -= 1;
+          this.setNextQuestion(qIndex + 1);
+        }
+      },
+      second,
+      true
+    );
   }
 
   async handleStartBtn() {
