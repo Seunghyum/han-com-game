@@ -26,7 +26,7 @@ class ScorePage {
             {
               type: 'button',
               className: 'game-control__button',
-              onclick: handleRestartGame.bind(this),
+              onclick: handleRestartGame,
             },
             '다시시작'
           )

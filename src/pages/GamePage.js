@@ -66,9 +66,11 @@ class GamePage {
       $GameControlBtn.update({ innerText: '시작' });
       $WordInput.update({ value: '', disabled: true });
       $Score.update({ innerText: initState.score });
-      setTimeout(() => $Time.update({ innerText: initState.time }), 0);
-      this.timer.finish();
       $QuestionText.update({ innerText: initState.questionText });
+      // setInterval이 종료되기 전에 init 타이밍이 먼저인 경우를 대비해서 Task Queue 한 박자 늦게 함수를 등록하기 위해
+      setTimeout(() => $Time.update({ innerText: initState.time }), 0);
+
+      this.timer.finish();
     } else {
       $GameControlBtn.update({ innerText: '초기화' });
       $QuestionText.update({ innerText: 'Start!' });
