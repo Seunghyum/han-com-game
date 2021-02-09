@@ -26,8 +26,8 @@ export const initRoute = (pathName = window.location.pathname) => {
   };
 };
 
-export function historyRouter(pathName = window.location.pathname) {
-  window.history.pushState({}, '', window.location.origin + pathName);
+export function historyRouter(pathName = window.location.pathname, data) {
+  window.history.pushState(data, pathName, window.location.origin + pathName);
   renderHTML(getPath(pathName));
 }
 
