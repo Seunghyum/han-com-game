@@ -35,6 +35,7 @@ class GamePage {
     );
     this.$gameInput = input({
       type: 'test',
+      disabled: true,
       className: 'game-control__input',
       placeholder: '입력',
     });
@@ -72,12 +73,14 @@ class GamePage {
       this.timer.finish();
       this.$gameControlBtn.textContent = '시작';
       this.$gameInput.value = '';
+      this.$gameInput.disabled = true;
       this.$score.textContent = initState.$score;
       this.$time.textContent = initState.$time;
       this.$questionText.textContent = initState.$questionText;
     } else {
       this.$gameControlBtn.textContent = '초기화';
       this.$questionText.textContent = 'Start!';
+      this.$gameInput.disabled = false;
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
@@ -96,7 +99,11 @@ class GamePage {
   handleInputKeyUp(event) {
     if (event.key !== 'Enter') return;
     const { text: question, second } = this.questions[this.qIndex];
-    if (event.target.value !== question) return;
+    if (event.target.value !== question) {
+      this.$gameInput.classList.add('error');
+      setTimeout(() => this.$gameInput.classList.remove('error'), 500);
+      return;
+    }
 
     this.allTimes.push(second);
     this.setNextQuestion(this.qIndex + 1);
