@@ -94,6 +94,7 @@ class GamePage {
     if (event.key !== 'Enter') return;
     const { text: question, second } = this.questions[this.qIndex];
     if (event.target.value !== question) {
+      $WordInput.update({ value: '' });
       $WordInput.addClass('error');
       setTimeout(() => $WordInput.removeClass('error'), 500);
       return;
