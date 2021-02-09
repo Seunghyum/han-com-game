@@ -1,11 +1,11 @@
 import { historyRouter, ROUTE_PATH } from '~src/router';
-import { div, p, span, button } from '~utils/vDom';
+import { div, p, span, button, input } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getFetch } from '~api/fetch';
 
-import WordInputClass from '~components/WordInput';
+import InputBase from '~src/components/InputBase';
 
-const WordInput = new WordInputClass();
+const WordInput = new InputBase();
 
 const initState = {
   $questionText: '문제 단어',
@@ -136,8 +136,10 @@ class GamePage {
         div({ className: 'game-control' }, [
           WordInput.render({
             disabled: true,
-            isStarted: this.isStarted,
+            placeholder: '입력',
+            className: 'game-control__input',
             onkeyup: handleInputKeyUp.bind(this),
+            element: input(),
           }),
           $gameControlBtn,
         ]),

@@ -1,17 +1,19 @@
-import WordInputClass from './WordInput';
+import InputBase from './InputBase';
+import { input } from '~utils/vDom';
 
-describe('WordInput 컴포넌트 테스트', () => {
+describe('InputBase 컴포넌트 테스트', () => {
   const testData = {
     id: 'test',
     className: 'word-input-test',
     value: 'test value',
     placeholder: 'test placeholder',
     disabled: true,
+    element: input(),
   };
 
-  const WordInput = new WordInputClass().render(testData);
+  const TestInput = new InputBase().render(testData);
 
-  document.body.appendChild(WordInput);
+  document.body.appendChild(TestInput);
   let target = document.querySelector('#test');
 
   test('id, className를 props로 설정 가능하다.', () => {
