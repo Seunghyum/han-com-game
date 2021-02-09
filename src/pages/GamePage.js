@@ -9,6 +9,7 @@ const $WordInput = new ComponentBase();
 const $QuestionText = new ComponentBase();
 const $Time = new ComponentBase();
 const $Score = new ComponentBase();
+const $GameControlBtn = new ComponentBase();
 
 const initState = {
   questionText: '문제 단어',
@@ -24,13 +25,6 @@ class GamePage {
     this.qIndex = 0;
     this.score = 0;
     this.allTimes = [];
-    this.$gameControlBtn = button(
-      {
-        type: 'button',
-        className: 'game-control__button',
-      },
-      '시작'
-    );
   }
 
   finishGame() {
@@ -65,14 +59,14 @@ class GamePage {
   async handleStartBtn() {
     if (this.isStarted) {
       this.timer.finish();
-      this.$gameControlBtn.textContent = '시작';
+      $GameControlBtn.update({ innerText: '시작' });
       $WordInput.update({ value: '', disabled: true });
       $Score.update({ innerText: initState.score });
-      $Time.update({ innerText: initState.time });
+      setTimeout(() => $Time.update({ innerText: initState.time }), 0);
       this.timer.finish();
       $QuestionText.update({ innerText: initState.questionText });
     } else {
-      this.$gameControlBtn.textContent = '초기화';
+      $GameControlBtn.update({ innerText: '초기화' });
       $QuestionText.update({ innerText: 'Start!' });
       $WordInput.update({ disabled: false, focus: true });
       try {
@@ -104,9 +98,7 @@ class GamePage {
   }
 
   render() {
-    const { $gameControlBtn, handleStartBtn, handleInputKeyUp } = this;
-
-    $gameControlBtn.onclick = handleStartBtn.bind(this);
+    const { handleStartBtn, handleInputKeyUp } = this;
 
     return div(
       { className: 'container' },
@@ -148,7 +140,13 @@ class GamePage {
             onkeyup: handleInputKeyUp.bind(this),
             element: input(),
           }),
-          $gameControlBtn,
+          $GameControlBtn.render({
+            element: button(),
+            type: 'button',
+            className: 'game-control__button',
+            innerText: '시작',
+            onclick: handleStartBtn.bind(this),
+          }),
         ]),
       ])
     );
