@@ -1,3 +1,4 @@
+/* global */
 body {
   font-size: 15px;
 }
@@ -7,9 +8,19 @@ a, button {
 }
 
 .container {
-  max-width: 500px;
-  margin: auto;
+  display: flex;
+  max-width: 300px;
+  margin:auto;
+  align-items: center;
+  height: 100vh;
 }
+.content-wrapper {
+  margin: auto;
+  width: 100%;
+  padding-bottom: 10vh;
+}
+
+/* 문제페이지 */
 
 .question-board {
   display: flex;
@@ -30,11 +41,59 @@ a, button {
   text-align: center;
 }
 .game-control__button {
-  min-width: 100px;
   background-color: #47a1f8;
   border: 0px;
-  border-radius: 8px;
-  padding: 12px;
+  padding: 12px 72px;
   margin: auto;
   color: white;
+}
+
+.game-control__input {
+  display: block;
+  min-width: 180px;
+  background-color: #47a1f8;
+  border: 0px;
+  border-radius: 12px;
+  padding: 12px;
+  margin: auto;
+  margin-bottom: 18px;
+  color: white;
+  text-align: center;
+}
+.game-control__input::placeholder {
+  color: white;
+}
+.game-control__input:focus::placeholder {
+  opacity: 0;
+}
+::-webkit-input-placeholder, 
+:-moz-placeholder, /* Firefox 18- */
+::-moz-placeholder, /* Firefox 19+ */
+:-ms-input-placeholder {  
+  text-align: center; 
+  color: white
+}
+
+/* 완료 페이지 */
+
+.complete-banner {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.point-banner {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+.average-time-banner-wrapper {
+  text-align: center;
+}
+.average-time-banner {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 24px;
 }
