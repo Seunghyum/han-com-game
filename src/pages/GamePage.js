@@ -81,6 +81,7 @@ class GamePage {
       this.$gameControlBtn.textContent = '초기화';
       this.$questionText.textContent = 'Start!';
       this.$gameInput.disabled = false;
+      this.$gameInput.focus();
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
