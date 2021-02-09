@@ -3,7 +3,7 @@ class ComponentBase {
     this.domAttribute = {
       value: null,
       onkeyup: null,
-      disabled: false,
+      disabled: null,
       id: null,
       className: null,
       placeholder: null,

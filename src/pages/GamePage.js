@@ -7,11 +7,13 @@ import ComponentBase from '~src/components/ComponentBase';
 
 const $WordInput = new ComponentBase();
 const $QuestionText = new ComponentBase();
+const $Time = new ComponentBase();
+const $Score = new ComponentBase();
 
 const initState = {
   questionText: '문제 단어',
-  $time: '-',
-  $score: '-',
+  time: '-',
+  score: '-',
 };
 
 class GamePage {
@@ -22,11 +24,6 @@ class GamePage {
     this.qIndex = 0;
     this.score = 0;
     this.allTimes = [];
-    this.$time = span({ className: 'question-board__time' }, initState.$time);
-    this.$score = span(
-      { className: 'question-board__score' },
-      initState.$score
-    );
     this.$gameControlBtn = button(
       {
         type: 'button',
@@ -39,7 +36,9 @@ class GamePage {
   finishGame() {
     const { score, allTimes } = this;
     const sum = allTimes.reduce((a, b) => a + b, 0);
-    const averageTime = (sum / allTimes.length).toFixed(1);
+    let averageTime;
+    if (allTimes.length === 0) averageTime = 0;
+    else averageTime = (sum / allTimes.length).toFixed(1);
 
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
   }
@@ -52,10 +51,10 @@ class GamePage {
 
     const { text: question, second } = this.questions[qIndex];
     $QuestionText.update({ innerText: question });
+    $Score.update({ innerText: this.score });
 
-    this.$score.textContent = this.score;
     this.timer.start(second, (time) => {
-      if (this.isStarted) this.$time.textContent = time;
+      $Time.update({ innerText: time });
       if (!time) {
         this.score -= 1;
         this.setNextQuestion(qIndex + 1);
@@ -68,8 +67,9 @@ class GamePage {
       this.timer.finish();
       this.$gameControlBtn.textContent = '시작';
       $WordInput.update({ value: '', disabled: true });
-      this.$score.textContent = initState.$score;
-      this.$time.textContent = initState.$time;
+      $Score.update({ innerText: initState.score });
+      $Time.update({ innerText: initState.time });
+      this.timer.finish();
       $QuestionText.update({ innerText: initState.questionText });
     } else {
       this.$gameControlBtn.textContent = '초기화';
@@ -81,7 +81,7 @@ class GamePage {
         );
         this.questions = result;
         this.score = result.length;
-        this.$score.textContent = this.score;
+        $Score.update({ innerText: this.score });
         this.setNextQuestion(0);
       } catch (err) {
         throw new Error(err);
@@ -104,13 +104,7 @@ class GamePage {
   }
 
   render() {
-    const {
-      $time,
-      $score,
-      $gameControlBtn,
-      handleStartBtn,
-      handleInputKeyUp,
-    } = this;
+    const { $gameControlBtn, handleStartBtn, handleInputKeyUp } = this;
 
     $gameControlBtn.onclick = handleStartBtn.bind(this);
 
@@ -122,10 +116,23 @@ class GamePage {
             p(
               { className: 'question-board__time' },
               `남은 시간 : `,
-              $time,
+              $Time.render({
+                element: span(),
+                className: 'question-board__time',
+                innerText: initState.time,
+              }),
               '초'
             ),
-            p({ className: 'question-board__score' }, `점수 : `, $score, '점'),
+            p(
+              { className: 'question-board__score' },
+              `점수 : `,
+              $Score.render({
+                element: span(),
+                className: 'question-board__score',
+                innerText: initState.score,
+              }),
+              '점'
+            ),
           ]),
           $QuestionText.render({
             className: 'question-text',
