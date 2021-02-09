@@ -1,5 +1,5 @@
 import ComponentBase from './ComponentBase';
-import { input, p } from '~utils/vDom';
+import { button, input, p } from '~utils/vDom';
 
 describe('ComponentBase 컴포넌트 - Input 테스트', () => {
   const testData = {
@@ -41,8 +41,31 @@ describe('ComponentBase 컴포넌트 - innerText param 테스트', () => {
   const TestP = new ComponentBase().render(testData);
 
   document.body.appendChild(TestP);
-  let target = document.querySelector('#test-innerText');
-  test('id, className를 props로 설정 가능하다.', () => {
+  let target = document.querySelector('#' + testData.id);
+  test('innerText를 props로 설정 가능하다.', () => {
     expect(target.innerHTML).toBe(testData.innerText);
+  });
+});
+
+describe('ComponentBase 컴포넌트 - button param 테스트', () => {
+  const changedClassName = 'changed';
+  const testData = {
+    id: 'test-button',
+    innerText: 'hello world',
+    element: button(),
+    onclick: (event) => (event.target.className = changedClassName),
+  };
+
+  const TestP = new ComponentBase().render(testData);
+
+  document.body.appendChild(TestP);
+  let target = document.querySelector('#' + testData.id);
+  test('innerText를 props로 설정 가능하다.', () => {
+    expect(target.innerHTML).toBe(testData.innerText);
+  });
+
+  test('클릭을 props로 설정 가능하다.', () => {
+    target.click();
+    expect(target.className).toBe(changedClassName);
   });
 });

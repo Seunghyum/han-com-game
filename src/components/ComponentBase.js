@@ -1,8 +1,10 @@
 class ComponentBase {
   constructor() {
     this.domAttribute = {
+      type: null,
       value: null,
       onkeyup: null,
+      onclick: null,
       disabled: null,
       id: null,
       className: null,
