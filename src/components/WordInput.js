@@ -13,9 +13,6 @@ class WordInput {
     this.domControl = {
       focus: false,
     };
-    this.state = {
-      isStarted: false,
-    };
     this.element = null;
   }
 
@@ -30,13 +27,9 @@ class WordInput {
   update(props = {}) {
     for (const [key, value] of Object.entries(props)) {
       if (this.domAttribute[key] !== undefined) this.domAttribute[key] = value;
-      else if (this.state[key] !== undefined) this.state[key] = value;
     }
 
-    const newNode = input(
-      this.domAttribute,
-      this.isStarted ? '초기화' : '시작'
-    );
+    const newNode = input(this.domAttribute);
     this.element.replaceWith(newNode);
     if (props.focus) {
       this.domControl.focus = props.focus;
@@ -49,10 +42,9 @@ class WordInput {
   render(props = {}) {
     for (const [key, value] of Object.entries(props)) {
       if (this.domAttribute[key] !== undefined) this.domAttribute[key] = value;
-      else if (this.state[key] !== undefined) this.state[key] = value;
     }
 
-    this.element = input(this.domAttribute, this.isStarted ? '초기화' : '시작');
+    this.element = input(this.domAttribute);
 
     if (props.focus) {
       this.domControl.focus = props.focus;
