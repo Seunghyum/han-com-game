@@ -69,14 +69,15 @@ class GamePage {
 
   async handleStartBtn() {
     if (this.isStarted) {
-      this.$gameControlBtn.textContent = '시작';
       this.timer.finish();
+      this.$gameControlBtn.textContent = '시작';
       this.$gameInput.value = '';
       this.$score.textContent = initState.$score;
       this.$time.textContent = initState.$time;
       this.$questionText.textContent = initState.$questionText;
     } else {
       this.$gameControlBtn.textContent = '초기화';
+      this.$questionText.textContent = 'Start!';
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
@@ -93,8 +94,8 @@ class GamePage {
   }
 
   handleInputKeyUp(event) {
-    const { text: question, second } = this.questions[this.qIndex];
     if (event.key !== 'Enter') return;
+    const { text: question, second } = this.questions[this.qIndex];
     if (event.target.value !== question) return;
 
     this.allTimes.push(second);
