@@ -3,10 +3,18 @@ import { div, p, span, button, input } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getFetch } from '~api/fetch';
 
+import ComponentBase from '~src/components/ComponentBase';
+
+const $WordInput = new ComponentBase();
+const $QuestionText = new ComponentBase();
+const $Time = new ComponentBase();
+const $Score = new ComponentBase();
+const $GameControlBtn = new ComponentBase();
+
 const initState = {
-  $questionText: '문제 단어',
-  $time: '-',
-  $score: '-',
+  questionText: '문제 단어',
+  time: '-',
+  score: '-',
 };
 
 class GamePage {
@@ -17,34 +25,14 @@ class GamePage {
     this.qIndex = 0;
     this.score = 0;
     this.allTimes = [];
-    this.$questionText = p(
-      { className: 'question-text' },
-      initState.$questionText
-    );
-    this.$time = span({ className: 'question-board__time' }, initState.$time);
-    this.$score = span(
-      { className: 'question-board__score' },
-      initState.$score
-    );
-    this.$gameControlBtn = button(
-      {
-        type: 'button',
-        className: 'game-control__button',
-      },
-      '시작'
-    );
-    this.$gameInput = input({
-      type: 'test',
-      disabled: true,
-      className: 'game-control__input',
-      placeholder: '입력',
-    });
   }
 
   finishGame() {
     const { score, allTimes } = this;
     const sum = allTimes.reduce((a, b) => a + b, 0);
-    const averageTime = (sum / allTimes.length).toFixed(1);
+    let averageTime;
+    if (allTimes.length === 0) averageTime = 0;
+    else averageTime = (sum / allTimes.length).toFixed(1);
 
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
   }
@@ -52,43 +40,48 @@ class GamePage {
   setNextQuestion(qIndex) {
     this.qIndex = qIndex;
     this.timer.finish();
-    this.$gameInput.value = '';
+    $WordInput.update({ value: '', focus: true });
     if (this.questions.length - 1 < qIndex) return this.finishGame();
 
     const { text: question, second } = this.questions[qIndex];
-    this.$questionText.textContent = question;
+    $QuestionText.update({ innerText: question });
+    $Score.update({ innerText: this.score });
 
-    this.$score.textContent = this.score;
-    this.timer.start(second, (time) => {
-      if (this.isStarted) this.$time.textContent = time;
-      if (!time) {
-        this.score -= 1;
-        this.setNextQuestion(qIndex + 1);
-      }
-    });
+    this.timer.start(
+      (time) => {
+        $Time.update({ innerText: time });
+        if (!time) {
+          this.score -= 1;
+          this.setNextQuestion(qIndex + 1);
+        }
+      },
+      second,
+      true
+    );
   }
 
   async handleStartBtn() {
     if (this.isStarted) {
       this.timer.finish();
-      this.$gameControlBtn.textContent = '시작';
-      this.$gameInput.value = '';
-      this.$gameInput.disabled = true;
-      this.$score.textContent = initState.$score;
-      this.$time.textContent = initState.$time;
-      this.$questionText.textContent = initState.$questionText;
+      $GameControlBtn.update({ innerText: '시작' });
+      $WordInput.update({ value: '', disabled: true });
+      $Score.update({ innerText: initState.score });
+      $QuestionText.update({ innerText: initState.questionText });
+      // setInterval이 종료되기 전에 init 타이밍이 먼저인 경우를 대비해서 Task Queue 한 박자 늦게 함수를 등록하기 위해
+      setTimeout(() => $Time.update({ innerText: initState.time }), 0);
+
+      this.timer.finish();
     } else {
-      this.$gameControlBtn.textContent = '초기화';
-      this.$questionText.textContent = 'Start!';
-      this.$gameInput.disabled = false;
-      this.$gameInput.focus();
+      $GameControlBtn.update({ innerText: '초기화' });
+      $QuestionText.update({ innerText: 'Start!' });
+      $WordInput.update({ disabled: false, focus: true });
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
         );
         this.questions = result;
         this.score = result.length;
-        this.$score.textContent = this.score;
+        $Score.update({ innerText: this.score });
         this.setNextQuestion(0);
       } catch (err) {
         throw new Error(err);
@@ -101,8 +94,8 @@ class GamePage {
     if (event.key !== 'Enter') return;
     const { text: question, second } = this.questions[this.qIndex];
     if (event.target.value !== question) {
-      this.$gameInput.classList.add('error');
-      setTimeout(() => this.$gameInput.classList.remove('error'), 500);
+      $WordInput.addClass('error');
+      setTimeout(() => $WordInput.removeClass('error'), 500);
       return;
     }
 
@@ -111,18 +104,7 @@ class GamePage {
   }
 
   render() {
-    const {
-      $time,
-      $score,
-      $questionText,
-      $gameControlBtn,
-      $gameInput,
-      handleStartBtn,
-      handleInputKeyUp,
-    } = this;
-
-    $gameControlBtn.onclick = handleStartBtn.bind(this);
-    $gameInput.onkeyup = handleInputKeyUp.bind(this);
+    const { handleStartBtn, handleInputKeyUp } = this;
 
     return div(
       { className: 'container' },
@@ -132,14 +114,46 @@ class GamePage {
             p(
               { className: 'question-board__time' },
               `남은 시간 : `,
-              $time,
+              $Time.render({
+                element: span(),
+                className: 'question-board__time',
+                innerText: initState.time,
+              }),
               '초'
             ),
-            p({ className: 'question-board__score' }, `점수 : `, $score, '점'),
+            p(
+              { className: 'question-board__score' },
+              `점수 : `,
+              $Score.render({
+                element: span(),
+                className: 'question-board__score',
+                innerText: initState.score,
+              }),
+              '점'
+            ),
           ]),
-          $questionText,
+          $QuestionText.render({
+            className: 'question-text',
+            element: p(),
+            innerText: initState.questionText,
+          }),
         ]),
-        div({ className: 'game-control' }, [$gameInput, $gameControlBtn]),
+        div({ className: 'game-control' }, [
+          $WordInput.render({
+            disabled: true,
+            placeholder: '입력',
+            className: 'game-control__input',
+            onkeyup: handleInputKeyUp.bind(this),
+            element: input(),
+          }),
+          $GameControlBtn.render({
+            element: button(),
+            type: 'button',
+            className: 'game-control__button',
+            innerText: '시작',
+            onclick: handleStartBtn.bind(this),
+          }),
+        ]),
       ])
     );
   }

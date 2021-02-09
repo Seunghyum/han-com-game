@@ -9,7 +9,7 @@ a, button {
 
 .container {
   display: flex;
-  max-width: 300px;
+  max-width: 360px;
   margin:auto;
   align-items: center;
   height: 100vh;
