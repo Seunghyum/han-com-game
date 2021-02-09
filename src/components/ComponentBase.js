@@ -1,7 +1,7 @@
-class InputBase {
+class ComponentBase {
   constructor() {
     this.domAttribute = {
-      value: '',
+      value: null,
       onkeyup: null,
       disabled: false,
       id: null,
@@ -10,6 +10,7 @@ class InputBase {
     };
     this.domControl = {
       focus: false,
+      innerText: null,
     };
     this.element = null;
   }
@@ -30,7 +31,8 @@ class InputBase {
 
   applyDomAttribute() {
     for (const [key, value] of Object.entries(this.domAttribute)) {
-      this.element[key] = value;
+      const attr = this.domAttribute[key];
+      if (attr !== undefined && attr !== null) this.element[key] = value;
     }
   }
 
@@ -41,10 +43,19 @@ class InputBase {
     if (this.domControl.focus) setTimeout(() => this.element.focus(), 0);
   }
 
+  setInnerText(innerText) {
+    if (innerText) {
+      this.domControl.innerText = innerText;
+    }
+    if (this.domControl.innerText)
+      this.element.textContent = this.domControl.innerText;
+  }
+
   update(props = {}) {
     this.updateDomAttribute(props);
     this.applyDomAttribute();
     this.setFocus(props.focus);
+    this.setInnerText(props.innerText);
   }
 
   render(props = {}) {
@@ -52,8 +63,9 @@ class InputBase {
     this.element = props.element;
     this.applyDomAttribute();
     this.setFocus(props.focus);
+    this.setInnerText(props.innerText);
     return this.element;
   }
 }
 
-export default InputBase;
+export default ComponentBase;

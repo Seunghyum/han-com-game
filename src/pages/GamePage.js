@@ -3,12 +3,13 @@ import { div, p, span, button, input } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getFetch } from '~api/fetch';
 
-import InputBase from '~src/components/InputBase';
+import ComponentBase from '~src/components/ComponentBase';
 
-const WordInput = new InputBase();
+const $WordInput = new ComponentBase();
+const $QuestionText = new ComponentBase();
 
 const initState = {
-  $questionText: '문제 단어',
+  questionText: '문제 단어',
   $time: '-',
   $score: '-',
 };
@@ -21,10 +22,6 @@ class GamePage {
     this.qIndex = 0;
     this.score = 0;
     this.allTimes = [];
-    this.$questionText = p(
-      { className: 'question-text' },
-      initState.$questionText
-    );
     this.$time = span({ className: 'question-board__time' }, initState.$time);
     this.$score = span(
       { className: 'question-board__score' },
@@ -50,11 +47,11 @@ class GamePage {
   setNextQuestion(qIndex) {
     this.qIndex = qIndex;
     this.timer.finish();
-    WordInput.update({ value: '', focus: true });
+    $WordInput.update({ value: '', focus: true });
     if (this.questions.length - 1 < qIndex) return this.finishGame();
 
     const { text: question, second } = this.questions[qIndex];
-    this.$questionText.textContent = question;
+    $QuestionText.update({ innerText: question });
 
     this.$score.textContent = this.score;
     this.timer.start(second, (time) => {
@@ -70,14 +67,14 @@ class GamePage {
     if (this.isStarted) {
       this.timer.finish();
       this.$gameControlBtn.textContent = '시작';
-      WordInput.update({ value: '', disabled: true });
+      $WordInput.update({ value: '', disabled: true });
       this.$score.textContent = initState.$score;
       this.$time.textContent = initState.$time;
-      this.$questionText.textContent = initState.$questionText;
+      $QuestionText.update({ innerText: initState.questionText });
     } else {
       this.$gameControlBtn.textContent = '초기화';
-      this.$questionText.textContent = 'Start!';
-      WordInput.update({ disabled: false, focus: true });
+      $QuestionText.update({ innerText: 'Start!' });
+      $WordInput.update({ disabled: false, focus: true });
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
@@ -97,8 +94,8 @@ class GamePage {
     if (event.key !== 'Enter') return;
     const { text: question, second } = this.questions[this.qIndex];
     if (event.target.value !== question) {
-      WordInput.addClass('error');
-      setTimeout(() => WordInput.removeClass('error'), 500);
+      $WordInput.addClass('error');
+      setTimeout(() => $WordInput.removeClass('error'), 500);
       return;
     }
 
@@ -110,7 +107,6 @@ class GamePage {
     const {
       $time,
       $score,
-      $questionText,
       $gameControlBtn,
       handleStartBtn,
       handleInputKeyUp,
@@ -131,10 +127,14 @@ class GamePage {
             ),
             p({ className: 'question-board__score' }, `점수 : `, $score, '점'),
           ]),
-          $questionText,
+          $QuestionText.render({
+            className: 'question-text',
+            element: p(),
+            innerText: initState.questionText,
+          }),
         ]),
         div({ className: 'game-control' }, [
-          WordInput.render({
+          $WordInput.render({
             disabled: true,
             placeholder: '입력',
             className: 'game-control__input',
