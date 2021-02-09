@@ -1,3 +1,4 @@
+/* global */
 body {
   font-size: 15px;
 }
@@ -10,6 +11,8 @@ a, button {
   max-width: 500px;
   margin: auto;
 }
+
+/* 문제페이지 */
 
 .question-board {
   display: flex;
@@ -30,10 +33,9 @@ a, button {
   text-align: center;
 }
 .game-control__button {
-  min-width: 100px;
   background-color: #47a1f8;
   border: 0px;
-  padding: 12px;
+  padding: 12px 72px;
   margin: auto;
   color: white;
 }
@@ -62,4 +64,28 @@ a, button {
 :-ms-input-placeholder {  
   text-align: center; 
   color: white
+}
+
+/* 완료 페이지 */
+
+.complete-banner {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.point-banner {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+.average-time-banner-wrapper {
+  text-align: center;
+}
+.average-time-banner {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 24px;
 }

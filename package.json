@@ -35,7 +35,7 @@
     "*.js": [
       "eslint . --fix",
       "prettier --write",
-      "jest"
+      "jest --findRelatedTests"
     ]
   },
   "husky": {
