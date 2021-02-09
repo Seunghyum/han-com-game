@@ -1,7 +1,11 @@
 import { historyRouter, ROUTE_PATH } from '~src/router';
-import { div, p, span, button, input } from '~utils/vDom';
+import { div, p, span, button } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getFetch } from '~api/fetch';
+
+import WordInputClass from '~components/WordInput';
+
+const WordInput = new WordInputClass();
 
 const initState = {
   $questionText: '문제 단어',
@@ -33,12 +37,6 @@ class GamePage {
       },
       '시작'
     );
-    this.$gameInput = input({
-      type: 'test',
-      disabled: true,
-      className: 'game-control__input',
-      placeholder: '입력',
-    });
   }
 
   finishGame() {
@@ -52,7 +50,7 @@ class GamePage {
   setNextQuestion(qIndex) {
     this.qIndex = qIndex;
     this.timer.finish();
-    this.$gameInput.value = '';
+    WordInput.update({ value: '', focus: true });
     if (this.questions.length - 1 < qIndex) return this.finishGame();
 
     const { text: question, second } = this.questions[qIndex];
@@ -72,16 +70,14 @@ class GamePage {
     if (this.isStarted) {
       this.timer.finish();
       this.$gameControlBtn.textContent = '시작';
-      this.$gameInput.value = '';
-      this.$gameInput.disabled = true;
+      WordInput.update({ value: '', disabled: true });
       this.$score.textContent = initState.$score;
       this.$time.textContent = initState.$time;
       this.$questionText.textContent = initState.$questionText;
     } else {
       this.$gameControlBtn.textContent = '초기화';
       this.$questionText.textContent = 'Start!';
-      this.$gameInput.disabled = false;
-      this.$gameInput.focus();
+      WordInput.update({ disabled: false, focus: true });
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
@@ -101,8 +97,8 @@ class GamePage {
     if (event.key !== 'Enter') return;
     const { text: question, second } = this.questions[this.qIndex];
     if (event.target.value !== question) {
-      this.$gameInput.classList.add('error');
-      setTimeout(() => this.$gameInput.classList.remove('error'), 500);
+      WordInput.addClass('error');
+      setTimeout(() => WordInput.removeClass('error'), 500);
       return;
     }
 
@@ -116,13 +112,11 @@ class GamePage {
       $score,
       $questionText,
       $gameControlBtn,
-      $gameInput,
       handleStartBtn,
       handleInputKeyUp,
     } = this;
 
     $gameControlBtn.onclick = handleStartBtn.bind(this);
-    $gameInput.onkeyup = handleInputKeyUp.bind(this);
 
     return div(
       { className: 'container' },
@@ -139,7 +133,14 @@ class GamePage {
           ]),
           $questionText,
         ]),
-        div({ className: 'game-control' }, [$gameInput, $gameControlBtn]),
+        div({ className: 'game-control' }, [
+          WordInput.render({
+            disabled: true,
+            isStarted: this.isStarted,
+            onkeyup: handleInputKeyUp.bind(this),
+          }),
+          $gameControlBtn,
+        ]),
       ])
     );
   }
