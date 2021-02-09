@@ -60,7 +60,7 @@ class GamePage {
 
     this.$score.textContent = this.score;
     this.timer.start(second, (time) => {
-      this.$time.textContent = time;
+      if (this.isStarted) this.$time.textContent = time;
       if (!time) {
         this.score -= 1;
         this.setNextQuestion(qIndex + 1);
