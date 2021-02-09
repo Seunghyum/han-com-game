@@ -6,20 +6,18 @@ class Timer {
     };
   }
 
-  start(time, callback) {
+  start(callback, time, Immediate = false) {
     if (time) {
       this.state.seconds = time;
+    }
+    if (Immediate) {
       callback(this.state.seconds);
     }
-    setTimeout(() => {
-      this.state.seconds -= 1;
-      callback(this.state.seconds);
-    }, 1000);
 
     const interval = setInterval(() => {
       if (this.state.seconds === 0) clearInterval(this.state.interval);
-      callback(this.state.seconds);
       this.state.seconds -= 1;
+      callback(this.state.seconds);
     }, 1000);
     this.state.interval = interval;
   }
