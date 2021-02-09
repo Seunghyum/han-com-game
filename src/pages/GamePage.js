@@ -1,5 +1,5 @@
 import { historyRouter, ROUTE_PATH } from '~src/router';
-import { div, p, h1, a, span, button, input } from '~utils/vDom';
+import { div, p, span, button, input } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getFetch } from '~api/fetch';
 
@@ -16,6 +16,7 @@ class GamePage {
     this.questions = [];
     this.qIndex = 0;
     this.score = 0;
+    this.allTimes = [];
     this.$questionText = p(
       { className: 'question-text' },
       initState.$questionText
@@ -39,12 +40,19 @@ class GamePage {
     });
   }
 
+  finishGame() {
+    const { score, allTimes } = this;
+    const sum = allTimes.reduce((a, b) => a + b, 0);
+    const averageTime = (sum / allTimes.length).toFixed(1);
+
+    historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
+  }
+
   setNextQuestion(qIndex) {
     this.qIndex = qIndex;
     this.timer.finish();
     this.$gameInput.value = '';
-    if (this.questions.length - 1 < qIndex)
-      return historyRouter(ROUTE_PATH.ScorePage);
+    if (this.questions.length - 1 < qIndex) return this.finishGame();
 
     const { text: question, second } = this.questions[qIndex];
     this.$questionText.textContent = question;
@@ -78,15 +86,18 @@ class GamePage {
         this.$score.textContent = this.score;
         this.setNextQuestion(0);
       } catch (err) {
-        alert('네트워크 연결이 안됩니다.');
+        throw new Error(err);
       }
     }
     this.isStarted = !this.isStarted;
   }
 
   handleInputKeyUp(event) {
+    const { text: question, second } = this.questions[this.qIndex];
     if (event.key !== 'Enter') return;
-    if (event.target.value !== this.questions[this.qIndex].text) return;
+    if (event.target.value !== question) return;
+
+    this.allTimes.push(second);
     this.setNextQuestion(this.qIndex + 1);
   }
 
@@ -104,29 +115,24 @@ class GamePage {
     $gameControlBtn.onclick = handleStartBtn.bind(this);
     $gameInput.onkeyup = handleInputKeyUp.bind(this);
 
-    return div({ className: 'container' }, [
-      div([
-        h1('this is Game page'),
-        a(
-          {
-            href: ROUTE_PATH.ScorePage,
-            onclick: (event) => {
-              event.preventDefault();
-              historyRouter(ROUTE_PATH.ScorePage);
-            },
-          },
-          'to Score page'
-        ),
-      ]),
-      div([
-        div({ className: 'question-board' }, [
-          p({ className: 'question-board__time' }, `남은 시간 : `, $time, '초'),
-          p({ className: 'question-board__score' }, `점수 : `, $score, '점'),
+    return div(
+      { className: 'container' },
+      div({ className: 'content-wrapper' }, [
+        div([
+          div({ className: 'question-board' }, [
+            p(
+              { className: 'question-board__time' },
+              `남은 시간 : `,
+              $time,
+              '초'
+            ),
+            p({ className: 'question-board__score' }, `점수 : `, $score, '점'),
+          ]),
+          $questionText,
         ]),
-        $questionText,
-      ]),
-      div({ className: 'game-control' }, [$gameInput, $gameControlBtn]),
-    ]);
+        div({ className: 'game-control' }, [$gameInput, $gameControlBtn]),
+      ])
+    );
   }
 }
 
