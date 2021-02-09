@@ -12,7 +12,6 @@ const initState = {
 class GamePage {
   constructor() {
     this.isStarted = false;
-    this.isMount = false;
     this.timer = new Timer();
     this.questions = [];
     this.qIndex = 0;
@@ -102,40 +101,32 @@ class GamePage {
       handleInputKeyUp,
     } = this;
 
-    if (!this.isMount) {
-      this.isMount = true;
-      $gameControlBtn.onclick = handleStartBtn.bind(this);
-      $gameInput.onkeyup = handleInputKeyUp.bind(this);
+    $gameControlBtn.onclick = handleStartBtn.bind(this);
+    $gameInput.onkeyup = handleInputKeyUp.bind(this);
 
-      return div({ className: 'container' }, [
-        div([
-          h1('this is Game page'),
-          a(
-            {
-              href: ROUTE_PATH.ScorePage,
-              onclick: (event) => {
-                event.preventDefault();
-                historyRouter(ROUTE_PATH.ScorePage);
-              },
+    return div({ className: 'container' }, [
+      div([
+        h1('this is Game page'),
+        a(
+          {
+            href: ROUTE_PATH.ScorePage,
+            onclick: (event) => {
+              event.preventDefault();
+              historyRouter(ROUTE_PATH.ScorePage);
             },
-            'to Score page'
-          ),
+          },
+          'to Score page'
+        ),
+      ]),
+      div([
+        div({ className: 'question-board' }, [
+          p({ className: 'question-board__time' }, `남은 시간 : `, $time, '초'),
+          p({ className: 'question-board__score' }, `점수 : `, $score, '점'),
         ]),
-        div([
-          div({ className: 'question-board' }, [
-            p(
-              { className: 'question-board__time' },
-              `남은 시간 : `,
-              $time,
-              '초'
-            ),
-            p({ className: 'question-board__score' }, `점수 : `, $score, '점'),
-          ]),
-          $questionText,
-        ]),
-        div({ className: 'game-control' }, [$gameInput, $gameControlBtn]),
-      ]);
-    }
+        $questionText,
+      ]),
+      div({ className: 'game-control' }, [$gameInput, $gameControlBtn]),
+    ]);
   }
 }
 
