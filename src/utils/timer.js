@@ -6,11 +6,11 @@ class Timer {
     };
   }
 
-  start(callback, time, Immediate = false) {
+  start(callback, time, immediate = false) {
     if (time) {
       this.state.seconds = time;
     }
-    if (Immediate) {
+    if (immediate) {
       callback(this.state.seconds);
     }
 
