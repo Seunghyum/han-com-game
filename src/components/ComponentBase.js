@@ -1,3 +1,14 @@
+const domAttributes = new Set([
+  'type',
+  'value',
+  'id',
+  'className',
+  'onkeyup',
+  'onclick',
+  'disabled',
+  'placeholder',
+]);
+
 /**
  * ComponentBase의 주요 기능
  * 1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
@@ -5,19 +16,7 @@
  */
 class ComponentBase {
   constructor() {
-    this.domAttribute = {
-      type: null,
-      value: null,
-      onkeyup: null,
-      onclick: null,
-      disabled: null,
-      id: null,
-      className: null,
-      placeholder: null,
-    };
-    this.domControl = {
-      innerText: null,
-    };
+    this.textContent = null;
     this.element = null;
   }
 
@@ -42,15 +41,14 @@ class ComponentBase {
    * @param {Props} props
    */
   updateDomAttribute(props = {}) {
-    for (const attr in this.domAttribute) {
-      const newValue = props[attr];
-      if (props[attr] === undefined) continue;
-      if (attr == undefined)
-        throw new Error(`${attr} is not defined in ComponentBase class`);
-      if (attr === newValue) continue;
+    for (const key in props) {
+      if (!domAttributes.has(key)) continue;
+      const newValue = props[key];
+      const oldValue = this.element[key];
+      if (oldValue === undefined) continue;
+      if (oldValue === newValue) continue;
 
-      this.domAttribute[attr] = newValue;
-      this.element[attr] = newValue;
+      this.element[key] = newValue;
     }
   }
 
@@ -65,36 +63,49 @@ class ComponentBase {
   }
 
   /**
-   * Node.textContent = innerText 값을 설정합니다.
-   * @param {string} innerText
+   * Node.textContent = textContent 값을 설정합니다.
+   * @param {string} textContent
    */
-  setInnerText(innerText) {
-    if (innerText === undefined) return;
-    if (innerText === this.domControl.innerText) return;
+  setInnerText(textContent) {
+    if (textContent === undefined) return;
+    if (textContent === this.textContent) return;
 
-    this.domControl.innerText = innerText;
-    this.element.textContent = innerText;
+    this.textContent = textContent;
+    this.element.textContent = textContent;
   }
 
   /**
-   * update domAttribute, domControl and Element
+   * value 값을 설정합니다.
+   * @param {string} value
+   */
+  setValue(value) {
+    if (value === undefined) return;
+    if (value === this.element.value) return;
+
+    this.element.value = value;
+  }
+
+  /**
+   * update Dom Attributes, textContent and Element
    * @param {Props} props
    */
   update(props = {}) {
     this.updateDomAttribute(props);
     this.setFocus(props.focus);
-    this.setInnerText(props.innerText);
+    this.setInnerText(props.textContent);
+    this.setValue(props.value);
   }
 
   /**
-   * update domAttribute, domControl and Element
+   * init and render element, update Dom Attributes, textContent and Element
    * @param {Props} props
    */
   render(props = {}) {
     this.element = props.element;
     this.updateDomAttribute(props);
     this.setFocus(props.focus);
-    this.setInnerText(props.innerText);
+    this.setInnerText(props.textContent);
+    this.setValue(props.value);
     return this.element;
   }
 }
@@ -111,4 +122,5 @@ export default ComponentBase;
  * @property {Function} onclick Element onclick 속성
  * @property {boolean} disabled Element disabled 속성
  * @property {string} placeholder Element placeholder 속성
+ * ....
  */
