@@ -50,4 +50,6 @@ $ yarn jest
 - 단위 테스트 환경 : Jest
   - src/utils/vDom.spec.js : vDom가 각기 다른 params 마다 제대로 작동하는지 테스트.
   - src/utils/timer.spec.js : setInterval을 wrapping한 클래스의 메서드들을 테스트.
+  - src/utils/getAverage.spec.js : Array에서 평균값을 리턴하는 함수를 테스트.
   - src/components/ComponentBase.js : ComponentBase 로 추상화한 DOM Element를 조작하는 클래스 테스트
+  - src/router.spec.js : History API가 의도한 방식대로 작동하는지 테스트. 
