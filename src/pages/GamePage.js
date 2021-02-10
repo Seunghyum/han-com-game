@@ -1,9 +1,10 @@
 import { historyRouter, ROUTE_PATH } from '~src/router';
 import { div, p, span, button, input } from '~utils/vDom';
 import Timer from '~utils/timer';
+import { getAverage } from '~utils/getAverage';
 import { getFetch } from '~api/fetch';
 
-import ComponentBase from '~src/components/ComponentBase';
+import ComponentBase from '~components/ComponentBase';
 
 const $WordInput = new ComponentBase();
 const $QuestionText = new ComponentBase();
@@ -29,10 +30,7 @@ class GamePage {
 
   finishGame() {
     const { score, allTimes } = this;
-    const sum = allTimes.reduce((a, b) => a + b, 0);
-    let averageTime;
-    if (allTimes.length === 0) averageTime = 0;
-    else averageTime = (sum / allTimes.length).toFixed(1);
+    const averageTime = getAverage(allTimes);
 
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
   }
