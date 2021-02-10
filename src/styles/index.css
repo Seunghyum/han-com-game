@@ -7,10 +7,6 @@ a, button {
   cursor: pointer;
 }
 
-input:focus {
-  outline: none;
-}
-
 .container {
   display: flex;
   max-width: 360px;
