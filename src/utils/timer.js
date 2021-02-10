@@ -1,4 +1,6 @@
+/** setInterval을 선언적으로 쓸 수 있게 wrapping 한 클래스 */
 class Timer {
+  /** @param {number} time setInterval에 설정할 interver time */
   constructor(time = 0) {
     this.state = {
       seconds: time,
@@ -6,6 +8,12 @@ class Timer {
     };
   }
 
+  /**
+   * setInterval instance 생성 및 실행
+   * @param {function} callback 실행할 콜백함수
+   * @param {number} time setInterval에 설정할 interver time
+   * @param {boolean} immediate 즉시 실행 여부. true 설정시 즉시 한번 실행함
+   */
   start(callback, time, immediate = false) {
     if (time) {
       this.state.seconds = time;
@@ -22,6 +30,9 @@ class Timer {
     this.state.interval = interval;
   }
 
+  /**
+   * clearInterval 실행
+   */
   finish() {
     if (this.state.interval) clearInterval(this.state.interval);
   }
