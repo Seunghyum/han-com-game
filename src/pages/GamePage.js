@@ -39,7 +39,7 @@ class GamePage {
   setNextQuestion(qIndex) {
     this.qIndex = qIndex;
     this.timer.finish();
-    $WordInput.update({ value: '', focus: true });
+    $WordInput.update({ disabled: false, value: '', focus: true });
     if (this.questions.length - 1 < qIndex) return this.finishGame();
 
     const { text: question, second } = this.questions[qIndex];
@@ -76,7 +76,7 @@ class GamePage {
       this.isStarted = true;
       $GameControlBtn.update({ textContent: '초기화' });
       $QuestionText.update({ textContent: 'Start!' });
-      $WordInput.update({ disabled: false, focus: true });
+      $WordInput.update({ focus: true });
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
@@ -119,9 +119,9 @@ class GamePage {
               `남은 시간 : `,
               $Time.render({
                 element: span(this.isStarted ? this.score : initState.time),
-                className: 'question-board__time',
+                className: 'question-board__time-number',
               }),
-              '초'
+              ' 초'
             ),
             p(
               { className: 'question-board__score' },
@@ -134,9 +134,9 @@ class GamePage {
                       : initState.score
                     : initState.score
                 ),
-                className: 'question-board__score',
+                className: 'question-board__score-number',
               }),
-              '점'
+              ' 점'
             ),
           ]),
           $QuestionText.render({
