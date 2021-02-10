@@ -1,11 +1,12 @@
 const { join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
   entry: ['babel-polyfill', './src/index.js'],
   output: {
-    filename: '[name].bundle.js',
+    filename: 'main.bundle.js',
     path: join(__dirname, '../dist'),
   },
   resolve: {
@@ -43,5 +44,9 @@ module.exports = {
       template: join(__dirname, '../public/index.html'),
     }),
     new MiniCssExtractPlugin(),
+    new FaviconsWebpackPlugin({
+      logo: join(__dirname, '../public/favicon.png'),
+      mode: 'light',
+    }),
   ],
 };
