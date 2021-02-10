@@ -36,7 +36,7 @@ $ yarn jest
     - 주요기능
       1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
       2. Dom Attribute의 이전 속성을 비교해 변경시에만 업데이트 함.
-  - 각 페이지마다 데이터가 바뀌는 DOM Node의 참조값을 가지고 있고 값이 바뀔때마다 해당 노드의 textContent만 수정하여 렌더링 비용을 줄임.
+  - 각 페이지마다 데이터가 바뀌는 DOM Element의 참조값을 가지고 있고 값이 바뀔때마다 해당 Node의 ```Node.textContent```만 수정하여 렌더링 비용을 줄임.
 - 테스트 환경 : Jest
   - src/test/vDom.spec.js : vDom가 각기 다른 params 마다 제대로 작동하는지 테스트.
 - 백엔드 API 요청
