@@ -22,16 +22,16 @@ $ yarn jest
   - build script를 구성하여 /public 폴더에 빌드한 html, js, css를 export.
     - build 한 js 파일이 105KB 이므로 chunck로 나누지 않음.
 - 작업 환경 구성 : Eslint, Prettier, Husky
-  - Husky hook precommit 옵션을 설정하여 
+  - Husky hook precommit 옵션을 설정하여
     1. eslint 검사
     2. prettier 수정
-    3. 커밋 대상인 파일과 관련된 *.spec.js파일의 jest 검사 
+    3. 커밋 대상인 파일과 관련된 *.spec.js파일의 jest 검사
     이후에 에러 없을 시 커밋할 수 있게 구성.
 - UI 렌더링 방식
   - root(public/index.html의 ```<div id="app"></div>```)에 페이지 DOM Node를 한번에 렌더링 하는 방식.
   - src/utils/vDom.js에서 createElement를 래핑하는 함수를 만듦.
     1. render 함수안의 Dom의 위치를 가독성 좋게 표현
-    2. createElement 매서드를 가독성을 높임 
+    2. createElement 매서드를 가독성을 높임
   - src/components/ComponentBase를 정의
     - 주요기능
       1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
@@ -42,15 +42,16 @@ $ yarn jest
   - 간소화하여 사용하기 위해 src/api/fetch.js의 getFetch 함수로 정의.
 - 라우팅
   - History API를 사용해서 history.pushState(data,title,url)로 history.state에 전달할 상태값을 data인자에 담아 다음 화면을 렌더링할 때 해당 data 값을 사용함. - 관련 테스트 src/router.spec.js
-  - 게임 화면에서 게임을 완료했을때 History API를 사용하여 브라우저의 세션 기록을 조작함. 
+  - 게임 화면에서 게임을 완료했을때 History API를 사용하여 브라우저의 세션 기록을 조작함
     ```javascript
-    historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
+      historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
     ```
     완료 페이지에선 위 데이터(```score```, ```avewrageTime```)를 받아(history.state.score, history.state.score) DOM Node를 만들때 넣어줌.
   - window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 실행시켜서 화면을 렌더링 함. 게임 시작 이후에 score 페이지로 갔다가 돌아와도 게임이 살아있게 만듦
 - 단위 테스트 환경 : Jest
-  - src/utils/vDom.spec.js : vDom 함수 테스트.
-  - src/utils/timer.spec.js : setInterval을 wrapping한 클래스 테스트.
-  - src/utils/getAverage.spec.js : Array에서 평균값을 리턴하는 함수 테스트.
+  - src/utils/vDom.spec.js : vDom 함수 테스트
+  - src/utils/timer.spec.js : setInterval을 wrapping한 클래스 테스트
+  - src/utils/getAverage.spec.js : Array에서 평균값을 리턴하는 함수 테스트
   - src/components/ComponentBase.js : ComponentBase 로 추상화한 DOM Element를 조작하는 컴포넌트 클래스 테스트
   - src/router.spec.js : History API가 의도한 방식대로 작동하는지 mock 테스트
+  - src/api/fetch.spec.js : Fetch API로 getFetch 함수 mock 테스트
