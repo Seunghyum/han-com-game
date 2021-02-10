@@ -31,10 +31,10 @@ describe('ComponentBase 컴포넌트 - Input 테스트', () => {
   });
 });
 
-describe('ComponentBase 컴포넌트 - innerText param 테스트', () => {
+describe('ComponentBase 컴포넌트 - textContent param 테스트', () => {
   const testData = {
-    id: 'test-innerText',
-    innerText: 'hello world',
+    id: 'test-textContent',
+    textContent: 'hello world',
     element: p(),
   };
 
@@ -42,8 +42,8 @@ describe('ComponentBase 컴포넌트 - innerText param 테스트', () => {
 
   document.body.appendChild(TestP);
   let target = document.querySelector('#' + testData.id);
-  test('innerText를 props로 설정 가능하다.', () => {
-    expect(target.innerHTML).toBe(testData.innerText);
+  test('textContent를 props로 설정 가능하다.', () => {
+    expect(target.innerHTML).toBe(testData.textContent);
   });
 });
 
@@ -51,7 +51,7 @@ describe('ComponentBase 컴포넌트 - button param 테스트', () => {
   const changedClassName = 'changed';
   const testData = {
     id: 'test-button',
-    innerText: 'hello world',
+    textContent: 'hello world',
     element: button(),
     onclick: (event) => (event.target.className = changedClassName),
   };
@@ -60,8 +60,8 @@ describe('ComponentBase 컴포넌트 - button param 테스트', () => {
 
   document.body.appendChild(TestP);
   let target = document.querySelector('#' + testData.id);
-  test('innerText를 props로 설정 가능하다.', () => {
-    expect(target.innerHTML).toBe(testData.innerText);
+  test('textContent를 props로 설정 가능하다.', () => {
+    expect(target.innerHTML).toBe(testData.textContent);
   });
 
   test('클릭을 props로 설정 가능하다.', () => {

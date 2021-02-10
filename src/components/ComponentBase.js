@@ -7,7 +7,6 @@ class ComponentBase {
   constructor() {
     this.domAttribute = {
       type: null,
-      value: null,
       onkeyup: null,
       onclick: null,
       disabled: null,
@@ -16,7 +15,7 @@ class ComponentBase {
       placeholder: null,
     };
     this.domControl = {
-      innerText: null,
+      textContent: null,
     };
     this.element = null;
   }
@@ -42,15 +41,13 @@ class ComponentBase {
    * @param {Props} props
    */
   updateDomAttribute(props = {}) {
-    for (const attr in this.domAttribute) {
-      const newValue = props[attr];
-      if (props[attr] === undefined) continue;
-      if (attr == undefined)
-        throw new Error(`${attr} is not defined in ComponentBase class`);
-      if (attr === newValue) continue;
-
-      this.domAttribute[attr] = newValue;
-      this.element[attr] = newValue;
+    for (const key in props) {
+      const newValue = props[key];
+      const oldValue = this.domAttribute[key];
+      if (oldValue === undefined) continue;
+      if (oldValue === newValue) continue;
+      this.domAttribute[key] = newValue;
+      this.element[key] = newValue;
     }
   }
 
@@ -65,15 +62,22 @@ class ComponentBase {
   }
 
   /**
-   * Node.textContent = innerText 값을 설정합니다.
-   * @param {string} innerText
+   * Node.textContent = textContent 값을 설정합니다.
+   * @param {string} textContent
    */
-  setInnerText(innerText) {
-    if (innerText === undefined) return;
-    if (innerText === this.domControl.innerText) return;
+  setInnerText(textContent) {
+    if (textContent === undefined) return;
+    if (textContent === this.domControl.textContent) return;
 
-    this.domControl.innerText = innerText;
-    this.element.textContent = innerText;
+    this.domControl.textContent = textContent;
+    this.element.textContent = textContent;
+  }
+
+  setValue(value) {
+    if (value === undefined) return;
+    if (value === this.element.value) return;
+
+    this.element.value = value;
   }
 
   /**
@@ -83,7 +87,8 @@ class ComponentBase {
   update(props = {}) {
     this.updateDomAttribute(props);
     this.setFocus(props.focus);
-    this.setInnerText(props.innerText);
+    this.setInnerText(props.textContent);
+    this.setValue(props.value);
   }
 
   /**
@@ -94,7 +99,8 @@ class ComponentBase {
     this.element = props.element;
     this.updateDomAttribute(props);
     this.setFocus(props.focus);
-    this.setInnerText(props.innerText);
+    this.setInnerText(props.textContent);
+    this.setValue(props.value);
     return this.element;
   }
 }

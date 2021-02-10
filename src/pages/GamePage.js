@@ -43,12 +43,12 @@ class GamePage {
     if (this.questions.length - 1 < qIndex) return this.finishGame();
 
     const { text: question, second } = this.questions[qIndex];
-    $QuestionText.update({ innerText: question });
-    $Score.update({ innerText: this.score });
+    $QuestionText.update({ textContent: question });
+    $Score.update({ textContent: this.score });
 
     this.timer.start(
       (time) => {
-        $Time.update({ innerText: time });
+        $Time.update({ textContent: time });
         if (!time) {
           this.score -= 1;
           this.setNextQuestion(qIndex + 1);
@@ -62,11 +62,11 @@ class GamePage {
   initGameSetting() {
     this.isStarted = false;
     this.timer.finish(() => {
-      $Score.update({ innerText: initState.score });
-      $Time.update({ innerText: initState.time });
-      $QuestionText.update({ innerText: initState.questionText });
+      $Score.update({ textContent: initState.score });
+      $Time.update({ textContent: initState.time });
+      $QuestionText.update({ textContent: initState.questionText });
     });
-    $GameControlBtn.update({ innerText: '시작' });
+    $GameControlBtn.update({ textContent: '시작' });
     $WordInput.update({ value: '', disabled: true });
   }
 
@@ -74,8 +74,8 @@ class GamePage {
     if (this.isStarted) this.initGameSetting();
     else {
       this.isStarted = true;
-      $GameControlBtn.update({ innerText: '초기화' });
-      $QuestionText.update({ innerText: 'Start!' });
+      $GameControlBtn.update({ textContent: '초기화' });
+      $QuestionText.update({ textContent: 'Start!' });
       $WordInput.update({ disabled: false, focus: true });
       try {
         const result = await getFetch(
@@ -83,7 +83,7 @@ class GamePage {
         );
         this.questions = result;
         this.score = result.length;
-        $Score.update({ innerText: this.score });
+        $Score.update({ textContent: this.score });
         this.setNextQuestion(0);
       } catch (err) {
         throw new Error(err);
