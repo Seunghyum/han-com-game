@@ -25,7 +25,7 @@ $ yarn jest
   - Husky hook precommit 옵션을 설정하여 
     1. eslint 검사
     2. prettier 수정
-    3. jest 검사 
+    3. 커밋 대상인 파일과 관련된 *.spec.js파일의 jest 검사 
     이후에 에러 없을 시 커밋할 수 있게 구성.
 - UI 렌더링 방식
   - root(public/index.html의 ```<div id="app"></div>```)에 페이지 DOM Node를 한번에 렌더링 하는 방식.
@@ -38,7 +38,8 @@ $ yarn jest
       2. Dom Attribute의 이전 속성을 비교해 변경시에만 업데이트 함.
   - 각 페이지마다 데이터가 바뀌는 DOM Element의 참조값을 가지고 있고 값이 바뀔때마다 해당 Node의 ```Node.textContent```만 수정하여 렌더링 비용을 줄임.
 - 백엔드 API 요청
-  - 요청 API가 하나만 존재. env 파일로 관리 안하고 요청시 url 만 넣으면 작동하게 진행.
+  - 요청 API가 하나만 존재하므로 env 파일로 관리 안하고 요청시 url 만 넣으면 작동하게 진행.
+  - 간소화하여 사용하기 위해 src/api/fetch.js의 getFetch 함수로 정의.
 - 라우팅
   - History API를 사용해서 history.pushState(data,title,url)로 history.state에 전달할 상태값을 data인자에 담아 다음 화면을 렌더링할 때 해당 data 값을 사용함. - 관련 테스트 src/router.spec.js
   - 게임 화면에서 게임을 완료했을때 History API를 사용하여 브라우저의 세션 기록을 조작함. 
@@ -46,10 +47,10 @@ $ yarn jest
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
     ```
     완료 페이지에선 위 데이터(```score```, ```avewrageTime```)를 받아(history.state.score, history.state.score) DOM Node를 만들때 넣어줌.
-  - window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 다시 실행시켜서 화면을 렌더링 함.
+  - window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 실행시켜서 화면을 렌더링 함. 게임 시작 이후에 score 페이지로 갔다가 돌아와도 게임이 살아있게 만듦
 - 단위 테스트 환경 : Jest
-  - src/utils/vDom.spec.js : vDom가 각기 다른 params 마다 제대로 작동하는지 테스트.
-  - src/utils/timer.spec.js : setInterval을 wrapping한 클래스의 메서드들을 테스트.
-  - src/utils/getAverage.spec.js : Array에서 평균값을 리턴하는 함수를 테스트.
-  - src/components/ComponentBase.js : ComponentBase 로 추상화한 DOM Element를 조작하는 클래스 테스트
-  - src/router.spec.js : History API가 의도한 방식대로 작동하는지 테스트. 
+  - src/utils/vDom.spec.js : vDom 함수 테스트.
+  - src/utils/timer.spec.js : setInterval을 wrapping한 클래스 테스트.
+  - src/utils/getAverage.spec.js : Array에서 평균값을 리턴하는 함수 테스트.
+  - src/components/ComponentBase.js : ComponentBase 로 추상화한 DOM Element를 조작하는 컴포넌트 클래스 테스트
+  - src/router.spec.js : History API가 의도한 방식대로 작동하는지 mock 테스트
