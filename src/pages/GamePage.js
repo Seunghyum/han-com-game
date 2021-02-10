@@ -116,9 +116,8 @@ class GamePage {
               { className: 'question-board__time' },
               `남은 시간 : `,
               $Time.render({
-                element: span(),
+                element: span(initState.time),
                 className: 'question-board__time',
-                innerText: initState.time,
               }),
               '초'
             ),
@@ -126,32 +125,31 @@ class GamePage {
               { className: 'question-board__score' },
               `점수 : `,
               $Score.render({
-                element: span(),
+                element: span(initState.score),
                 className: 'question-board__score',
-                innerText: initState.score,
               }),
               '점'
             ),
           ]),
           $QuestionText.render({
             className: 'question-text',
-            element: p(),
-            innerText: initState.questionText,
+            element: p(initState.questionText),
           }),
         ]),
         div({ className: 'game-control' }, [
-          $WordInput.render({
-            disabled: true,
-            placeholder: '입력',
-            className: 'game-control__input',
-            onkeyup: handleInputKeyUp.bind(this),
-            element: input(),
-          }),
+          div(
+            $WordInput.render({
+              disabled: true,
+              placeholder: '입력',
+              className: 'game-control__input',
+              onkeyup: handleInputKeyUp.bind(this),
+              element: input(),
+            })
+          ),
           $GameControlBtn.render({
-            element: button(),
+            element: button('시작'),
             type: 'button',
             className: 'game-control__button',
-            innerText: '시작',
             onclick: handleStartBtn.bind(this),
           }),
         ]),

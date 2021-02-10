@@ -37,14 +37,17 @@ $ yarn jest
       1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
       2. Dom Attribute의 이전 속성을 비교해 변경시에만 업데이트 함.
   - 각 페이지마다 데이터가 바뀌는 DOM Element의 참조값을 가지고 있고 값이 바뀔때마다 해당 Node의 ```Node.textContent```만 수정하여 렌더링 비용을 줄임.
-- 테스트 환경 : Jest
-  - src/test/vDom.spec.js : vDom가 각기 다른 params 마다 제대로 작동하는지 테스트.
 - 백엔드 API 요청
   - 요청 API가 하나만 존재. env 파일로 관리 안하고 요청시 url 만 넣으면 작동하게 진행.
 - 라우팅
+  - History API를 사용해서 history.pushState(data,title,url)로 history.state에 전달할 상태값을 data인자에 담아 다음 화면을 렌더링할 때 해당 data 값을 사용함. - 관련 테스트 src/router.spec.js
   - 게임 화면에서 게임을 완료했을때 History API를 사용하여 브라우저의 세션 기록을 조작함. 
     ```javascript
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
     ```
-    완료 페이지에선 위 데이터(```score```, ```avewrageTime```)를 받아 DOM Node를 만들때 넣어줌.
-  - window.onpopstate 에 콘솔로그를 넣어 페이지 이동시(history.back, history.go, history.forward) renderHTML 함수를 다시 실행시켜서 화면을 렌더링 함.
+    완료 페이지에선 위 데이터(```score```, ```avewrageTime```)를 받아(history.state.score, history.state.score) DOM Node를 만들때 넣어줌.
+  - window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 다시 실행시켜서 화면을 렌더링 함.
+- 단위 테스트 환경 : Jest
+  - src/utils/vDom.spec.js : vDom가 각기 다른 params 마다 제대로 작동하는지 테스트.
+  - src/utils/timer.spec.js : setInterval을 wrapping한 클래스의 메서드들을 테스트.
+  - src/components/ComponentBase.js : ComponentBase 로 추상화한 DOM Element를 조작하는 클래스 테스트
