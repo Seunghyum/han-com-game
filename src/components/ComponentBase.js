@@ -73,6 +73,10 @@ class ComponentBase {
     this.element.textContent = textContent;
   }
 
+  /**
+   * value 값을 설정합니다.
+   * @param {string} value
+   */
   setValue(value) {
     if (value === undefined) return;
     if (value === this.element.value) return;
