@@ -26,15 +26,15 @@ class ComponentBase {
   }
 
   updateDomAttribute(props = {}) {
-    for (const [key, value] of Object.entries(props)) {
-      if (this.domAttribute[key] !== undefined) this.domAttribute[key] = value;
-    }
-  }
+    for (const attr in this.domAttribute) {
+      const newValue = props[attr];
+      if (props[attr] === undefined) continue;
+      if (attr == undefined)
+        throw new Error(`${attr} is not defined in ComponentBase class`);
+      if (attr === newValue) continue;
 
-  applyDomAttribute() {
-    for (const [key, value] of Object.entries(this.domAttribute)) {
-      const attr = this.domAttribute[key];
-      if (attr !== undefined && attr !== null) this.element[key] = value;
+      this.domAttribute[attr] = newValue;
+      this.element[attr] = newValue;
     }
   }
 
@@ -55,15 +55,13 @@ class ComponentBase {
 
   update(props = {}) {
     this.updateDomAttribute(props);
-    this.applyDomAttribute();
     this.setFocus(props.focus);
     this.setInnerText(props.innerText);
   }
 
   render(props = {}) {
-    this.updateDomAttribute(props);
     this.element = props.element;
-    this.applyDomAttribute();
+    this.updateDomAttribute(props);
     this.setFocus(props.focus);
     this.setInnerText(props.innerText);
     return this.element;
