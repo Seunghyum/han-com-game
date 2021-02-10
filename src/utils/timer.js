@@ -32,9 +32,11 @@ class Timer {
 
   /**
    * clearInterval 실행
+   * @param {Function} callback
    */
-  finish() {
+  finish(callback) {
     if (this.state.interval) clearInterval(this.state.interval);
+    if (callback) callback();
   }
 }
 
