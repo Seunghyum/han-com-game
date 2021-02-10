@@ -1,5 +1,6 @@
 import { historyRouter, ROUTE_PATH } from '~src/router';
 import { div, p, button } from '~utils/vDom';
+import ConfetiComponent from '~components/ConfetiComponent';
 class ScorePage {
   handleRestartGame() {
     historyRouter(ROUTE_PATH.GamePage);
@@ -8,8 +9,8 @@ class ScorePage {
   render() {
     const { handleRestartGame } = this;
 
-    return div(
-      { className: 'container' },
+    return div({ className: 'container' }, [
+      ConfetiComponent(),
       div({ className: 'content-wrapper' }, [
         p({ className: 'complete-banner' }, 'Mission Complete!'),
         p(
@@ -31,8 +32,8 @@ class ScorePage {
             '다시시작'
           )
         ),
-      ])
-    );
+      ]),
+    ]);
   }
 }
 

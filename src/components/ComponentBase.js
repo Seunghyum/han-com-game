@@ -45,7 +45,6 @@ class ComponentBase {
       if (!domAttributes.has(key)) continue;
       const newValue = props[key];
       const oldValue = this.element[key];
-      if (oldValue === undefined) continue;
       if (oldValue === newValue) continue;
 
       this.element[key] = newValue;
