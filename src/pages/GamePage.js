@@ -23,7 +23,7 @@ class GamePage {
     this.timer = new Timer();
     this.questions = [];
     this.qIndex = 0;
-    this.score = 0;
+    this.score = null;
     this.allTimes = [];
   }
 
@@ -125,7 +125,9 @@ class GamePage {
               { className: 'question-board__score' },
               `점수 : `,
               $Score.render({
-                element: span(initState.score),
+                element: span(
+                  this.score !== null ? this.score.toString() : initState.score
+                ),
                 className: 'question-board__score',
               }),
               '점'
@@ -133,13 +135,17 @@ class GamePage {
           ]),
           $QuestionText.render({
             className: 'question-text',
-            element: p(initState.questionText),
+            element: p(
+              this.questions[this.qIndex]
+                ? this.questions[this.qIndex].text
+                : initState.questionText
+            ),
           }),
         ]),
         div({ className: 'game-control' }, [
           div(
             $WordInput.render({
-              disabled: true,
+              disabled: !this.isStarted,
               placeholder: '입력',
               className: 'game-control__input',
               onkeyup: handleInputKeyUp.bind(this),
