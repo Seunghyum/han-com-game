@@ -1,5 +1,4 @@
-import '~src/styles/index.css';
-import '~src/styles/reset.css';
+import '~src/styles/index.scss';
 
 import { initRoute } from '~src/router';
 

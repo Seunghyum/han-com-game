@@ -1,3 +1,6 @@
+@import './reset.scss';
+@import './confeti.scss';
+
 /* global */
 body {
   font-size: 15px;
@@ -5,6 +8,12 @@ body {
 
 a, button {
   cursor: pointer;
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  opacity: 1;
+}
+a, button:hover {
+  opacity: 0.8;
 }
 
 .container {
@@ -13,6 +22,7 @@ a, button {
   margin:auto;
   align-items: center;
   height: 100vh;
+  padding:18px;
 }
 .content-wrapper {
   margin: auto;
@@ -22,11 +32,12 @@ a, button {
 
 /* 문제페이지 */
 @keyframes wiggle {
-  0% { transform: rotate(0deg); }
-  80% { transform: rotate(0deg); }
-  85% { transform: rotate(5deg); }
-  95% { transform: rotate(-5deg); }
-  100% { transform: rotate(0deg); }
+  0% {transform: translate(0px, 0px)}
+  20% {transform: translate(1px, 1px)}
+  40% {transform: translate(-1px, -1px)}
+  60% {transform: translate(-1px, 1px)}
+  80% {transform: translate(1px, -1px)}
+  100% {transform: translate(0px, 0px)}
 }
 
 .question-board {
@@ -73,7 +84,7 @@ a, button {
 }
 .game-control__input.error {
   background-color: #f84748;
-  animation: wiggle 0.2s 1;
+  animation: wiggle .5s ease-in-out 1;
 }
 .game-control__input::placeholder {
   color: white;
