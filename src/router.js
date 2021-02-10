@@ -8,9 +8,14 @@ export const ROUTE_PATH = {
   ScorePage: '/score',
 };
 
-const routes = {
-  '/': new GamePage(),
-  '/score': new ScorePage(),
+const routesMemo = {
+  '/': null,
+  '/score': null,
+};
+
+const routeMap = {
+  '/': () => new GamePage(),
+  '/score': () => new ScorePage(),
 };
 
 const renderHTML = (route) => {
@@ -19,16 +24,19 @@ const renderHTML = (route) => {
 };
 
 export const initRoute = (pathName = window.location.pathname) => {
-  renderHTML(getPath(pathName));
+  renderHTML(getPathLazy(pathName));
 
   window.onpopstate = () => {
-    renderHTML(getPath(window.location.pathname));
+    renderHTML(getPathLazy(window.location.pathname));
   };
 };
 
 export function historyRouter(pathName = window.location.pathname, data) {
   window.history.pushState(data, pathName, window.location.origin + pathName);
-  renderHTML(getPath(pathName));
+  renderHTML(getPathLazy(pathName));
 }
 
-const getPath = (pathName) => routes[pathName];
+function getPathLazy(pathName) {
+  if (!routesMemo[pathName]) routesMemo[pathName] = routeMap[pathName]();
+  return routesMemo[pathName];
+}

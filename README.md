@@ -48,6 +48,7 @@ $ yarn jest
     ```
     완료 페이지에선 위 데이터(```score```, ```avewrageTime```)를 받아(history.state.score, history.state.score) DOM Node를 만들때 넣어줌.
   - window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 실행시켜서 화면을 렌더링 함. 게임 시작 이후에 score 페이지로 갔다가 돌아와도 게임이 살아있게 만듦
+  - React.Lazy처럼 페이지 라우팅 시 모든 페이지 클래스 인스턴스를 페이지 초기화 로딩때 한번에 생성하지 않고 방문한 페이지만 생성하도록 함.
 - 단위 테스트 환경 : Jest
   - src/utils/vDom.spec.js : vDom 함수 테스트
   - src/utils/timer.spec.js : setInterval을 wrapping한 클래스 테스트
