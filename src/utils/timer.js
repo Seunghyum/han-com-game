@@ -38,6 +38,14 @@ class Timer {
     if (this.state.interval) clearInterval(this.state.interval);
     if (callback) callback();
   }
+
+  /**
+   * @returns {number} this.state.seconds 값 리턴
+   */
+
+  getSeconds() {
+    return this.state.seconds;
+  }
 }
 
 export default Timer;

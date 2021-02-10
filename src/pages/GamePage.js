@@ -99,8 +99,9 @@ class GamePage {
       setTimeout(() => $WordInput.removeClass('error'), 500);
       return;
     }
+    const remainSeconds = this.timer.getSeconds();
 
-    this.allTimes.push(second);
+    this.allTimes.push(second - remainSeconds);
     this.setNextQuestion(this.qIndex + 1);
   }
 
