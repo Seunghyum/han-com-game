@@ -65,7 +65,7 @@ class ComponentBase {
   }
 
   /**
-   * HTMLElment.innerText = innerText 값을 설정합니다.
+   * Node.textContent = innerText 값을 설정합니다.
    * @param {string} innerText
    */
   setInnerText(innerText) {

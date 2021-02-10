@@ -58,18 +58,21 @@ class GamePage {
     );
   }
 
-  async handleStartBtn() {
-    if (this.isStarted) {
-      this.timer.finish();
-      $GameControlBtn.update({ innerText: '시작' });
-      $WordInput.update({ value: '', disabled: true });
+  initGameSetting() {
+    this.isStarted = false;
+    this.timer.finish(() => {
       $Score.update({ innerText: initState.score });
+      $Time.update({ innerText: initState.time });
       $QuestionText.update({ innerText: initState.questionText });
-      // setInterval이 종료되기 전에 init 타이밍이 먼저인 경우를 대비해서 Task Queue 한 박자 늦게 함수를 등록하기 위해
-      setTimeout(() => $Time.update({ innerText: initState.time }), 0);
+    });
+    $GameControlBtn.update({ innerText: '시작' });
+    $WordInput.update({ value: '', disabled: true });
+  }
 
-      this.timer.finish();
-    } else {
+  async handleStartBtn() {
+    if (this.isStarted) this.initGameSetting();
+    else {
+      this.isStarted = true;
       $GameControlBtn.update({ innerText: '초기화' });
       $QuestionText.update({ innerText: 'Start!' });
       $WordInput.update({ disabled: false, focus: true });
@@ -85,7 +88,6 @@ class GamePage {
         throw new Error(err);
       }
     }
-    this.isStarted = !this.isStarted;
   }
 
   handleInputKeyUp(event) {
@@ -114,7 +116,7 @@ class GamePage {
               { className: 'question-board__time' },
               `남은 시간 : `,
               $Time.render({
-                element: span(initState.time),
+                element: span(this.isStarted ? this.score : initState.time),
                 className: 'question-board__time',
               }),
               '초'
@@ -124,7 +126,11 @@ class GamePage {
               `점수 : `,
               $Score.render({
                 element: span(
-                  this.score !== null ? this.score.toString() : initState.score
+                  this.isStarted
+                    ? this.score !== null
+                      ? this.score.toString()
+                      : initState.score
+                    : initState.score
                 ),
                 className: 'question-board__score',
               }),
@@ -134,8 +140,10 @@ class GamePage {
           $QuestionText.render({
             className: 'question-text',
             element: p(
-              this.questions[this.qIndex]
-                ? this.questions[this.qIndex].text
+              this.isStarted
+                ? this.questions[this.qIndex]
+                  ? this.questions[this.qIndex].text
+                  : initState.questionText
                 : initState.questionText
             ),
           }),
@@ -151,7 +159,7 @@ class GamePage {
             })
           ),
           $GameControlBtn.render({
-            element: button('시작'),
+            element: button(this.isStarted ? '초기화' : '시작'),
             type: 'button',
             className: 'game-control__button',
             onclick: handleStartBtn.bind(this),
