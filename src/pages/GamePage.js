@@ -29,6 +29,7 @@ class GamePage {
   }
 
   finishGame() {
+    this.initGameSetting();
     const { score, allTimes } = this;
     const averageTime = getAverage(allTimes);
 
