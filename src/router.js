@@ -9,8 +9,8 @@ export const ROUTE_PATH = {
 };
 
 const routes = {
-  '/': () => new GamePage(),
-  '/score': () => new ScorePage(),
+  '/': new GamePage(),
+  '/score': new ScorePage(),
 };
 
 const renderHTML = (route) => {
@@ -31,4 +31,4 @@ export function historyRouter(pathName = window.location.pathname, data) {
   renderHTML(getPath(pathName));
 }
 
-const getPath = (pathName) => routes[pathName]();
+const getPath = (pathName) => routes[pathName];

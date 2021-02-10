@@ -1,9 +1,10 @@
 import { historyRouter, ROUTE_PATH } from '~src/router';
 import { div, p, span, button, input } from '~utils/vDom';
 import Timer from '~utils/timer';
+import { getAverage } from '~utils/getAverage';
 import { getFetch } from '~api/fetch';
 
-import ComponentBase from '~src/components/ComponentBase';
+import ComponentBase from '~components/ComponentBase';
 
 const $WordInput = new ComponentBase();
 const $QuestionText = new ComponentBase();
@@ -23,16 +24,13 @@ class GamePage {
     this.timer = new Timer();
     this.questions = [];
     this.qIndex = 0;
-    this.score = 0;
+    this.score = null;
     this.allTimes = [];
   }
 
   finishGame() {
     const { score, allTimes } = this;
-    const sum = allTimes.reduce((a, b) => a + b, 0);
-    let averageTime;
-    if (allTimes.length === 0) averageTime = 0;
-    else averageTime = (sum / allTimes.length).toFixed(1);
+    const averageTime = getAverage(allTimes);
 
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
   }
@@ -125,7 +123,9 @@ class GamePage {
               { className: 'question-board__score' },
               `점수 : `,
               $Score.render({
-                element: span(initState.score),
+                element: span(
+                  this.score !== null ? this.score.toString() : initState.score
+                ),
                 className: 'question-board__score',
               }),
               '점'
@@ -133,13 +133,17 @@ class GamePage {
           ]),
           $QuestionText.render({
             className: 'question-text',
-            element: p(initState.questionText),
+            element: p(
+              this.questions[this.qIndex]
+                ? this.questions[this.qIndex].text
+                : initState.questionText
+            ),
           }),
         ]),
         div({ className: 'game-control' }, [
           div(
             $WordInput.render({
-              disabled: true,
+              disabled: !this.isStarted,
               placeholder: '입력',
               className: 'game-control__input',
               onkeyup: handleInputKeyUp.bind(this),
