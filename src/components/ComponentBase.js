@@ -1,3 +1,14 @@
+const domAttributes = new Set([
+  'type',
+  'value',
+  'id',
+  'className',
+  'onkeyup',
+  'onclick',
+  'disabled',
+  'placeholder',
+]);
+
 /**
  * ComponentBase의 주요 기능
  * 1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
@@ -5,18 +16,7 @@
  */
 class ComponentBase {
   constructor() {
-    this.domAttribute = {
-      type: null,
-      onkeyup: null,
-      onclick: null,
-      disabled: null,
-      id: null,
-      className: null,
-      placeholder: null,
-    };
-    this.domControl = {
-      textContent: null,
-    };
+    this.textContent = null;
     this.element = null;
   }
 
@@ -42,11 +42,12 @@ class ComponentBase {
    */
   updateDomAttribute(props = {}) {
     for (const key in props) {
+      if (!domAttributes.has(key)) continue;
       const newValue = props[key];
-      const oldValue = this.domAttribute[key];
+      const oldValue = this.element[key];
       if (oldValue === undefined) continue;
       if (oldValue === newValue) continue;
-      this.domAttribute[key] = newValue;
+
       this.element[key] = newValue;
     }
   }
@@ -67,9 +68,9 @@ class ComponentBase {
    */
   setInnerText(textContent) {
     if (textContent === undefined) return;
-    if (textContent === this.domControl.textContent) return;
+    if (textContent === this.textContent) return;
 
-    this.domControl.textContent = textContent;
+    this.textContent = textContent;
     this.element.textContent = textContent;
   }
 
@@ -85,7 +86,7 @@ class ComponentBase {
   }
 
   /**
-   * update domAttribute, domControl and Element
+   * update Dom Attributes, textContent and Element
    * @param {Props} props
    */
   update(props = {}) {
@@ -96,7 +97,7 @@ class ComponentBase {
   }
 
   /**
-   * update domAttribute, domControl and Element
+   * init and render element, update Dom Attributes, textContent and Element
    * @param {Props} props
    */
   render(props = {}) {
@@ -121,4 +122,5 @@ export default ComponentBase;
  * @property {Function} onclick Element onclick 속성
  * @property {boolean} disabled Element disabled 속성
  * @property {string} placeholder Element placeholder 속성
+ * ....
  */

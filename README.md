@@ -35,7 +35,7 @@ $ yarn jest
   - src/components/ComponentBase를 정의
     - 주요기능
       1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
-      2. Dom Attribute의 이전 속성을 비교해 변경시에만 업데이트 함.
+      2. Dom Attribute의 이전 속성을 비교해 변경시에만 업데이트 함. ```ComponentBase.updateDomAttribute()```
   - 각 페이지마다 데이터가 바뀌는 DOM Element의 참조값을 가지고 있고 값이 바뀔때마다 해당 Node의 ```Node.textContent```만 수정하여 렌더링 비용을 줄임.
 - 백엔드 API 요청
   - 요청 API가 하나만 존재하므로 env 파일로 관리 안하고 요청시 url 만 넣으면 작동하게 진행.
