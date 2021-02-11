@@ -27,24 +27,26 @@ class GamePage extends ReactiveComponent {
     super({
       state: {
         isStart: false,
+        score: null,
       },
     });
     this.timer = new Timer();
     this.questions = [];
     this.qIndex = 0;
-    this.score = null;
+    this.score = initState.score;
     this.allTimes = [];
 
     this.setEffect((isStart) => $GameControlButton.updateState({ isStart }), [
       'isStart',
     ]);
+    this.setEffect((score) => $Score.update({ textContent: score }), ['score']);
   }
 
   finishGame() {
-    this.initGameSetting();
-    const { score, allTimes } = this;
+    const { allTimes } = this;
+    const { score } = this.state;
     const averageTime = getAverage(allTimes);
-
+    this.initGameSetting();
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
   }
 
@@ -56,13 +58,12 @@ class GamePage extends ReactiveComponent {
 
     const { text: question, second } = this.questions[qIndex];
     $QuestionText.update({ textContent: question });
-    $Score.update({ textContent: this.score });
 
     this.timer.start(
       (time) => {
         $Time.update({ textContent: time });
         if (!time) {
-          this.score -= 1;
+          this.setState({ score: this.state.score - 1 });
           this.setNextQuestion(qIndex + 1);
         }
       },
@@ -72,9 +73,8 @@ class GamePage extends ReactiveComponent {
   }
 
   initGameSetting() {
-    this.setState({ isStart: false });
+    this.setState({ isStart: false, score: initState.score });
     this.timer.finish(() => {
-      $Score.update({ textContent: initState.score });
       $Time.update({ textContent: initState.time });
       $QuestionText.update({ textContent: initState.questionText });
     });
@@ -91,8 +91,7 @@ class GamePage extends ReactiveComponent {
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
         );
         this.questions = result;
-        this.score = result.length;
-        $Score.update({ textContent: this.score });
+        this.setState({ score: result.length });
         this.setNextQuestion(0);
       } catch (err) {
         throw new Error(err);
@@ -125,7 +124,9 @@ class GamePage extends ReactiveComponent {
               { className: 'question-board__time' },
               `남은 시간 : `,
               $Time.render({
-                element: span(this.state.isStart ? this.score : initState.time),
+                element: span(
+                  this.state.isStart ? this.state.score : initState.time
+                ),
                 className: 'question-board__time-number',
               }),
               ' 초'
@@ -136,8 +137,8 @@ class GamePage extends ReactiveComponent {
               $Score.render({
                 element: span(
                   this.state.isStart
-                    ? this.score !== null
-                      ? this.score.toString()
+                    ? this.state.score !== null
+                      ? this.state.score.toString()
                       : initState.score
                     : initState.score
                 ),
