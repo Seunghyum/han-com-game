@@ -13,6 +13,10 @@ class WordInput extends ComponentBase {
     });
   }
 
+  /**
+   * 상태값 별로 분기처리된 로직을 수행하기 위한 상태 업데이트 로직
+   * @param {updateStateProp}
+   */
   updateState({ isWrong, isClean, isFocus }) {
     if (isWrong) {
       this.addClass('error');
@@ -31,3 +35,10 @@ class WordInput extends ComponentBase {
 }
 
 export default WordInput;
+
+/**
+ * @typedef {Object} updateStateProp
+ * @property {boolean} isWrong
+ * @property {boolean} isClean
+ * @property {boolean} isFocus
+ */

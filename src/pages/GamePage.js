@@ -2,17 +2,19 @@ import { historyRouter, ROUTE_PATH } from '~src/router';
 import { div, p, span } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getAverage } from '~utils/getAverage';
+import ReactiveComponent from '~utils/ReactiveComponent';
+
 import { getFetch } from '~api/fetch';
 
 import ComponentBase from '~components/ComponentBase';
-
 import WordInput from '~components/WordInput';
 import GameControlButton from '~components/GameControlButton';
 
-const $WordInput = new WordInput();
 const $QuestionText = new ComponentBase();
 const $Time = new ComponentBase();
 const $Score = new ComponentBase();
+
+const $WordInput = new WordInput();
 const $GameControlButton = new GameControlButton();
 
 const initState = {
@@ -21,21 +23,38 @@ const initState = {
   score: '-',
 };
 
-class GamePage {
+class GamePage extends ReactiveComponent {
   constructor() {
-    this.isStarted = false;
+    super({
+      state: {
+        isStart: false,
+        score: initState.score,
+        time: initState.time,
+        questionText: initState.questionText,
+      },
+    });
     this.timer = new Timer();
     this.questions = [];
     this.qIndex = 0;
-    this.score = null;
+    this.score = initState.score;
     this.allTimes = [];
+
+    this.setEffect((isStart) => $GameControlButton.updateState({ isStart }), [
+      'isStart',
+    ]);
+    this.setEffect((score) => $Score.update({ textContent: score }), ['score']);
+    this.setEffect((time) => $Time.update({ textContent: time }), ['time']);
+    this.setEffect(
+      (questionText) => $QuestionText.update({ textContent: questionText }),
+      ['questionText']
+    );
   }
 
   finishGame() {
-    this.initGameSetting();
-    const { score, allTimes } = this;
+    const { allTimes } = this;
+    const { score } = this.state;
     const averageTime = getAverage(allTimes);
-
+    this.initGameSetting();
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
   }
 
@@ -45,17 +64,17 @@ class GamePage {
     $WordInput.updateState({ isClean: true, isFocus: true });
     if (this.questions.length - 1 < qIndex) return this.finishGame();
 
-    const { text: question, second } = this.questions[qIndex];
-    $QuestionText.update({ textContent: question });
-    $Score.update({ textContent: this.score });
+    const { text: questionText, second } = this.questions[qIndex];
+    this.setState({ questionText });
 
     this.timer.start(
       (time) => {
-        $Time.update({ textContent: time });
+        let score = this.state.score;
         if (!time) {
-          this.score -= 1;
           this.setNextQuestion(qIndex + 1);
+          score--;
         }
+        this.setState({ score, time });
       },
       second,
       true
@@ -63,29 +82,27 @@ class GamePage {
   }
 
   initGameSetting() {
-    this.isStarted = false;
     this.timer.finish(() => {
-      $Score.update({ textContent: initState.score });
-      $Time.update({ textContent: initState.time });
-      $QuestionText.update({ textContent: initState.questionText });
+      this.setState({
+        time: initState.time,
+        isStart: false,
+        score: initState.score,
+        questionText: initState.questionText,
+      });
     });
-    $GameControlButton.updateState({ isStart: this.isStarted });
     $WordInput.updateState({ isClean: true });
   }
 
   async handleStartBtn() {
-    if (this.isStarted) this.initGameSetting();
+    if (this.state.isStart) this.initGameSetting();
     else {
-      this.isStarted = true;
-      $GameControlButton.updateState({ isStart: this.isStarted });
-      $QuestionText.update({ textContent: 'Start!' });
+      this.setState({ isStart: true, questionText: 'Start!' });
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
         );
         this.questions = result;
-        this.score = result.length;
-        $Score.update({ textContent: this.score });
+        this.setState({ score: result.length });
         this.setNextQuestion(0);
       } catch (err) {
         throw new Error(err);
@@ -96,10 +113,8 @@ class GamePage {
   handleInputKeyUp(event) {
     if (event.key !== 'Enter') return;
     const { text: question, second } = this.questions[this.qIndex];
-    if (event.target.value !== question) {
-      $WordInput.updateState({ isWrong: true });
-      return;
-    }
+    if (event.target.value !== question)
+      return $WordInput.updateState({ isWrong: true });
     const remainSeconds = this.timer.getSeconds();
 
     this.allTimes.push(second - remainSeconds);
@@ -118,7 +133,11 @@ class GamePage {
               { className: 'question-board__time' },
               `남은 시간 : `,
               $Time.render({
-                element: span(this.isStarted ? this.score : initState.time),
+                element: span(
+                  this.state.isStart
+                    ? this.state.time.toString()
+                    : initState.time
+                ),
                 className: 'question-board__time-number',
               }),
               ' 초'
@@ -128,10 +147,8 @@ class GamePage {
               `점수 : `,
               $Score.render({
                 element: span(
-                  this.isStarted
-                    ? this.score !== null
-                      ? this.score.toString()
-                      : initState.score
+                  this.state.isStart
+                    ? this.state.score.toString()
                     : initState.score
                 ),
                 className: 'question-board__score-number',
@@ -142,10 +159,8 @@ class GamePage {
           $QuestionText.render({
             className: 'question-text',
             element: p(
-              this.isStarted
-                ? this.questions[this.qIndex]
-                  ? this.questions[this.qIndex].text
-                  : initState.questionText
+              this.state.isStart
+                ? this.state.questionText
                 : initState.questionText
             ),
           }),
@@ -153,7 +168,7 @@ class GamePage {
         div({ className: 'game-control' }, [
           div(
             $WordInput.render({
-              disabled: !this.isStarted,
+              disabled: !this.state.isStart,
               onkeyup: handleInputKeyUp.bind(this),
             })
           ),
