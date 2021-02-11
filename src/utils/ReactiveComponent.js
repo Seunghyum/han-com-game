@@ -1,3 +1,7 @@
+/**
+ * 변수에 반응하여 등록된 콜백을 실행하는 반응형 컴포넌트를 사용할때 쓸 클래스 정의
+ */
+
 class ReactiveComponent {
   constructor(props) {
     const self = this;
@@ -20,6 +24,11 @@ class ReactiveComponent {
     });
   }
 
+  /**
+   * 변수명을 받아 effects에 콜백을 등록하는 함수
+   * @param {Function} callback
+   * @param {string[]} targetValueNames
+   */
   setEffect(callback, targetValueNames = []) {
     targetValueNames.forEach((name) => {
       if (this.effects[name] === undefined) this.effects[name] = [];
@@ -27,6 +36,10 @@ class ReactiveComponent {
     });
   }
 
+  /**
+   * this.state에 업데이트 할 속성값들을 object로 설정
+   * @param {Object} obj
+   */
   setState(obj) {
     for (const key in obj) {
       if (this.state[key] === undefined)
