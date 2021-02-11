@@ -1,5 +1,5 @@
 import { historyRouter, ROUTE_PATH } from '~src/router';
-import { div, p, span, button } from '~utils/vDom';
+import { div, p, span } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getAverage } from '~utils/getAverage';
 import { getFetch } from '~api/fetch';
@@ -7,12 +7,13 @@ import { getFetch } from '~api/fetch';
 import ComponentBase from '~components/ComponentBase';
 
 import WordInput from '~components/WordInput';
+import GameControlButton from '~components/GameControlButton';
 
 const $WordInput = new WordInput();
 const $QuestionText = new ComponentBase();
 const $Time = new ComponentBase();
 const $Score = new ComponentBase();
-const $GameControlBtn = new ComponentBase();
+const $GameControlButton = new GameControlButton();
 
 const initState = {
   questionText: '문제 단어',
@@ -68,7 +69,7 @@ class GamePage {
       $Time.update({ textContent: initState.time });
       $QuestionText.update({ textContent: initState.questionText });
     });
-    $GameControlBtn.update({ textContent: '시작' });
+    $GameControlButton.updateState({ isStart: this.isStarted });
     $WordInput.updateState({ isClean: true });
   }
 
@@ -76,7 +77,7 @@ class GamePage {
     if (this.isStarted) this.initGameSetting();
     else {
       this.isStarted = true;
-      $GameControlBtn.update({ textContent: '초기화' });
+      $GameControlButton.updateState({ isStart: this.isStarted });
       $QuestionText.update({ textContent: 'Start!' });
       try {
         const result = await getFetch(
@@ -153,15 +154,10 @@ class GamePage {
           div(
             $WordInput.render({
               disabled: !this.isStarted,
-              placeholder: '입력',
-              className: 'game-control__input',
               onkeyup: handleInputKeyUp.bind(this),
             })
           ),
-          $GameControlBtn.render({
-            element: button(this.isStarted ? '초기화' : '시작'),
-            type: 'button',
-            className: 'game-control__button',
+          $GameControlButton.render({
             onclick: handleStartBtn.bind(this),
           }),
         ]),
