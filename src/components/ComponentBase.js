@@ -100,11 +100,8 @@ class ComponentBase {
    * @param {Props} props
    */
   render(props = {}) {
-    this.element = props.element;
-    this.updateDomAttribute(props);
-    this.setFocus(props.focus);
-    this.setInnerText(props.textContent);
-    this.setValue(props.value);
+    if (props.element) this.element = props.element;
+    this.update(props);
     return this.element;
   }
 }
