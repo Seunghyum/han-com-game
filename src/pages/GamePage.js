@@ -10,10 +10,11 @@ import ComponentBase from '~components/ComponentBase';
 import WordInput from '~components/WordInput';
 import GameControlButton from '~components/GameControlButton';
 
-const $WordInput = new WordInput();
 const $QuestionText = new ComponentBase();
 const $Time = new ComponentBase();
 const $Score = new ComponentBase();
+
+const $WordInput = new WordInput();
 const $GameControlButton = new GameControlButton();
 
 const initState = {
@@ -27,7 +28,9 @@ class GamePage extends ReactiveComponent {
     super({
       state: {
         isStart: false,
-        score: null,
+        score: initState.score,
+        time: initState.time,
+        questionText: initState.questionText,
       },
     });
     this.timer = new Timer();
@@ -40,6 +43,11 @@ class GamePage extends ReactiveComponent {
       'isStart',
     ]);
     this.setEffect((score) => $Score.update({ textContent: score }), ['score']);
+    this.setEffect((time) => $Time.update({ textContent: time }), ['time']);
+    this.setEffect(
+      (questionText) => $QuestionText.update({ textContent: questionText }),
+      ['questionText']
+    );
   }
 
   finishGame() {
@@ -56,16 +64,17 @@ class GamePage extends ReactiveComponent {
     $WordInput.updateState({ isClean: true, isFocus: true });
     if (this.questions.length - 1 < qIndex) return this.finishGame();
 
-    const { text: question, second } = this.questions[qIndex];
-    $QuestionText.update({ textContent: question });
+    const { text: questionText, second } = this.questions[qIndex];
+    this.setState({ questionText });
 
     this.timer.start(
       (time) => {
-        $Time.update({ textContent: time });
+        let score = this.state.score;
         if (!time) {
-          this.setState({ score: this.state.score - 1 });
           this.setNextQuestion(qIndex + 1);
+          score--;
         }
+        this.setState({ score, time });
       },
       second,
       true
@@ -73,10 +82,13 @@ class GamePage extends ReactiveComponent {
   }
 
   initGameSetting() {
-    this.setState({ isStart: false, score: initState.score });
     this.timer.finish(() => {
-      $Time.update({ textContent: initState.time });
-      $QuestionText.update({ textContent: initState.questionText });
+      this.setState({
+        time: initState.time,
+        isStart: false,
+        score: initState.score,
+        questionText: initState.questionText,
+      });
     });
     $WordInput.updateState({ isClean: true });
   }
@@ -84,8 +96,7 @@ class GamePage extends ReactiveComponent {
   async handleStartBtn() {
     if (this.state.isStart) this.initGameSetting();
     else {
-      this.setState({ isStart: true });
-      $QuestionText.update({ textContent: 'Start!' });
+      this.setState({ isStart: true, questionText: 'Start!' });
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
@@ -102,10 +113,8 @@ class GamePage extends ReactiveComponent {
   handleInputKeyUp(event) {
     if (event.key !== 'Enter') return;
     const { text: question, second } = this.questions[this.qIndex];
-    if (event.target.value !== question) {
-      $WordInput.updateState({ isWrong: true });
-      return;
-    }
+    if (event.target.value !== question)
+      return $WordInput.updateState({ isWrong: true });
     const remainSeconds = this.timer.getSeconds();
 
     this.allTimes.push(second - remainSeconds);
@@ -125,7 +134,9 @@ class GamePage extends ReactiveComponent {
               `남은 시간 : `,
               $Time.render({
                 element: span(
-                  this.state.isStart ? this.state.score : initState.time
+                  this.state.isStart
+                    ? this.state.time.toString()
+                    : initState.time
                 ),
                 className: 'question-board__time-number',
               }),
@@ -137,9 +148,7 @@ class GamePage extends ReactiveComponent {
               $Score.render({
                 element: span(
                   this.state.isStart
-                    ? this.state.score !== null
-                      ? this.state.score.toString()
-                      : initState.score
+                    ? this.state.score.toString()
                     : initState.score
                 ),
                 className: 'question-board__score-number',
@@ -151,9 +160,7 @@ class GamePage extends ReactiveComponent {
             className: 'question-text',
             element: p(
               this.state.isStart
-                ? this.questions[this.qIndex]
-                  ? this.questions[this.qIndex].text
-                  : initState.questionText
+                ? this.state.questionText
                 : initState.questionText
             ),
           }),

@@ -6,7 +6,7 @@ class ReactiveComponent {
       set: function (state, key, value) {
         if (state[key] === undefined)
           throw Error(`${key} is not defined in state`);
-        if (state[key] === value) return;
+        if (state[key] === value) return true;
 
         if (Array.isArray(self.effects[key])) {
           self.effects[key].forEach((event) => {
