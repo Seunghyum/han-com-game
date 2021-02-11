@@ -7,7 +7,10 @@ class WordInput extends ComponentBase {
     this.isWrong = false;
     this.isClean = false;
     this.isFocus = false;
-    this.element = input();
+    this.element = input({
+      placeholder: '입력',
+      className: 'game-control__input',
+    });
   }
 
   updateState({ isWrong, isClean, isFocus }) {
@@ -24,11 +27,6 @@ class WordInput extends ComponentBase {
     if (isFocus) {
       this.setFocus(true);
     }
-  }
-
-  render(props) {
-    if (props) this.update(props);
-    return this.element;
   }
 }
 

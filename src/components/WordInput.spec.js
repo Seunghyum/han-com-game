@@ -9,25 +9,28 @@ describe('WordInput 컴포넌트 테스트', () => {
     disabled: true,
   };
 
-  const TestInput = new WordInput().render(testData);
+  const $WordInput = new WordInput();
 
-  document.body.appendChild(TestInput);
+  document.body.appendChild($WordInput.render(testData));
   let target = document.querySelector('#test');
 
-  test('id, className를 props로 설정 가능하다.', () => {
-    expect(target.className).toBe(testData.className);
-    expect(target.id).toBe(testData.id);
+  it('isClean = true 일 경우', () => {
+    $WordInput.updateState({ isClean: true });
+
+    expect(target.disabled).toEqual(false);
+    expect(target.value).toEqual('');
   });
 
-  test('value를 props로 설정 가능하다.', () => {
-    expect(target.value).toBe(testData.value);
-  });
+  it('isWrong = true 일 경우', () => {
+    const testValue = 'test value';
+    $WordInput.update({ value: testValue });
+    $WordInput.updateState({ isWrong: true });
 
-  test('placeholder를 props로 설정 가능하다.', () => {
-    expect(target.placeholder).toBe(testData.placeholder);
-  });
+    expect($WordInput.element.classList.contains('error')).toBe(true);
+    expect($WordInput.element.value).toBe('');
 
-  test('disabled를 props로 설정 가능하다.', () => {
-    expect(target.disabled).toBe(testData.disabled);
+    setTimeout(() => {
+      expect($WordInput.element.classList.contains('error')).toBe(false);
+    }, 1000);
   });
 });
