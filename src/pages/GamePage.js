@@ -1,12 +1,14 @@
 import { historyRouter, ROUTE_PATH } from '~src/router';
-import { div, p, span, button, input } from '~utils/vDom';
+import { div, p, span, button } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getAverage } from '~utils/getAverage';
 import { getFetch } from '~api/fetch';
 
 import ComponentBase from '~components/ComponentBase';
 
-const $WordInput = new ComponentBase();
+import WordInput from '~components/WordInput';
+
+const $WordInput = new WordInput();
 const $QuestionText = new ComponentBase();
 const $Time = new ComponentBase();
 const $Score = new ComponentBase();
@@ -39,7 +41,7 @@ class GamePage {
   setNextQuestion(qIndex) {
     this.qIndex = qIndex;
     this.timer.finish();
-    $WordInput.update({ disabled: false, value: '', focus: true });
+    $WordInput.updateState({ isClean: true, isFocus: true });
     if (this.questions.length - 1 < qIndex) return this.finishGame();
 
     const { text: question, second } = this.questions[qIndex];
@@ -67,7 +69,7 @@ class GamePage {
       $QuestionText.update({ textContent: initState.questionText });
     });
     $GameControlBtn.update({ textContent: '시작' });
-    $WordInput.update({ value: '', disabled: true });
+    $WordInput.updateState({ isClean: true });
   }
 
   async handleStartBtn() {
@@ -76,7 +78,6 @@ class GamePage {
       this.isStarted = true;
       $GameControlBtn.update({ textContent: '초기화' });
       $QuestionText.update({ textContent: 'Start!' });
-      $WordInput.update({ focus: true });
       try {
         const result = await getFetch(
           'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
@@ -95,9 +96,7 @@ class GamePage {
     if (event.key !== 'Enter') return;
     const { text: question, second } = this.questions[this.qIndex];
     if (event.target.value !== question) {
-      $WordInput.update({ value: '' });
-      $WordInput.addClass('error');
-      setTimeout(() => $WordInput.removeClass('error'), 500);
+      $WordInput.updateState({ isWrong: true });
       return;
     }
     const remainSeconds = this.timer.getSeconds();
@@ -157,7 +156,6 @@ class GamePage {
               placeholder: '입력',
               className: 'game-control__input',
               onkeyup: handleInputKeyUp.bind(this),
-              element: input(),
             })
           ),
           $GameControlBtn.render({
