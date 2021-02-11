@@ -2,10 +2,11 @@ import { historyRouter, ROUTE_PATH } from '~src/router';
 import { div, p, span } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getAverage } from '~utils/getAverage';
+import ReactiveComponent from '~utils/ReactiveComponent';
+
 import { getFetch } from '~api/fetch';
 
 import ComponentBase from '~components/ComponentBase';
-
 import WordInput from '~components/WordInput';
 import GameControlButton from '~components/GameControlButton';
 
@@ -21,14 +22,22 @@ const initState = {
   score: '-',
 };
 
-class GamePage {
+class GamePage extends ReactiveComponent {
   constructor() {
-    this.isStarted = false;
+    super({
+      state: {
+        isStart: false,
+      },
+    });
     this.timer = new Timer();
     this.questions = [];
     this.qIndex = 0;
     this.score = null;
     this.allTimes = [];
+
+    this.setEffect((isStart) => $GameControlButton.updateState({ isStart }), [
+      'isStart',
+    ]);
   }
 
   finishGame() {
@@ -63,21 +72,19 @@ class GamePage {
   }
 
   initGameSetting() {
-    this.isStarted = false;
+    this.setState({ isStart: false });
     this.timer.finish(() => {
       $Score.update({ textContent: initState.score });
       $Time.update({ textContent: initState.time });
       $QuestionText.update({ textContent: initState.questionText });
     });
-    $GameControlButton.updateState({ isStart: this.isStarted });
     $WordInput.updateState({ isClean: true });
   }
 
   async handleStartBtn() {
-    if (this.isStarted) this.initGameSetting();
+    if (this.state.isStart) this.initGameSetting();
     else {
-      this.isStarted = true;
-      $GameControlButton.updateState({ isStart: this.isStarted });
+      this.setState({ isStart: true });
       $QuestionText.update({ textContent: 'Start!' });
       try {
         const result = await getFetch(
@@ -118,7 +125,7 @@ class GamePage {
               { className: 'question-board__time' },
               `남은 시간 : `,
               $Time.render({
-                element: span(this.isStarted ? this.score : initState.time),
+                element: span(this.state.isStart ? this.score : initState.time),
                 className: 'question-board__time-number',
               }),
               ' 초'
@@ -128,7 +135,7 @@ class GamePage {
               `점수 : `,
               $Score.render({
                 element: span(
-                  this.isStarted
+                  this.state.isStart
                     ? this.score !== null
                       ? this.score.toString()
                       : initState.score
@@ -142,7 +149,7 @@ class GamePage {
           $QuestionText.render({
             className: 'question-text',
             element: p(
-              this.isStarted
+              this.state.isStart
                 ? this.questions[this.qIndex]
                   ? this.questions[this.qIndex].text
                   : initState.questionText
@@ -153,7 +160,7 @@ class GamePage {
         div({ className: 'game-control' }, [
           div(
             $WordInput.render({
-              disabled: !this.isStarted,
+              disabled: !this.state.isStart,
               onkeyup: handleInputKeyUp.bind(this),
             })
           ),
