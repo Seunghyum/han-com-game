@@ -8,12 +8,13 @@ describe('ComponentBase 컴포넌트 - Input 테스트', () => {
     value: 'test value',
     placeholder: 'test placeholder',
     disabled: true,
+    focus: true,
     element: input(),
   };
 
-  const TestInput = new ComponentBase().render(testData);
+  const TestInput = new ComponentBase();
 
-  document.body.appendChild(TestInput);
+  document.body.appendChild(TestInput.render(testData));
   let target = document.querySelector('#test');
 
   test('id, className를 props로 설정 가능하다.', () => {
@@ -28,6 +29,21 @@ describe('ComponentBase 컴포넌트 - Input 테스트', () => {
   });
   test('disabled를 props로 설정 가능하다.', () => {
     expect(target.disabled).toBe(testData.disabled);
+  });
+
+  it('focus를 props로 설정 가능하다', () => {
+    setTimeout(() => expect(target).toHaveFocus(), 100);
+  });
+
+  it('setValue매서드로 value 설정이 가능하다', () => {
+    TestInput.setValue('test setValue');
+    expect(target.value).toBe('test setValue');
+  });
+
+  it('removeClass 매서드로 class 삭제가 가능하다', () => {
+    TestInput.addClass('class-test');
+    TestInput.removeClass(testData.className);
+    expect(target.className).toBe('class-test');
   });
 });
 
