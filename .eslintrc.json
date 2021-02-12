@@ -7,7 +7,7 @@
       "node": true,
       "jest": true
   },
-  "ignorePatterns": ["node_modules/", "dist/", "*.spec.js"],
+  "ignorePatterns": ["node_modules/", "dist/", "*.spec.js", "jsdoc/", "coverage/"],
   "rules": {
     "prettier/prettier": "error"
   },

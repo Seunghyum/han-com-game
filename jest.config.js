@@ -13,5 +13,5 @@ module.exports = {
     '^~components(.*)$': '<rootDir>/src/components$1',
     '^~pages(.*)$': '<rootDir>/src/pages$1',
   },
-  transformIgnorePatterns: ['<rootDir>/node_modules/'],
+  transformIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/jsdoc/'],
 };
