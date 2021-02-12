@@ -99,13 +99,13 @@ Husky hook precommit 옵션을 설정하여
 
 ### View - ViewModel 분리
 
-src/page는 뷰모델의 역할에만 집중.
-src/components/xxComponent 는 뷰의 역할에만 집중.
+> src/page는 뷰모델의 역할에만 집중.
+> src/components/xxComponent 는 뷰의 역할에만 집중.
 
 - ReactiveComponent 클래스 정의
   - 목적 : GamePage가 상속받아 사용. *ViewModel* 역할에 집중할 수 있게하게 위해 만듦. View - ViewModel을 분리해서 View의 디스플레이 로직에 관심없이 page가 state관리와 비즈니스 로직에만 관심있게 하기위해 디자인 함.
   - 동작방식
-    - Proxy API를 사용하여 state의 속성값을 옵저빙함.
+    - Proxy API를 사용하여 Proxy 패턴으로 state의 속성값을 변경할때 특정액션(콜백)을 실행함.
     - setEffect(Callback, [...stateName]) 함수로 this.state[stateName]값이 변경될 때 Callback을 실행시킴
     - this.state 변경시에는 this.setState() 매서드를 사용함.
 - ComponentBase 클래스 정의
@@ -127,8 +127,9 @@ src/components/xxComponent 는 뷰의 역할에만 집중.
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
   ```
   완료 페이지에선 위 데이터(```score```, ```avewrageTime```)를 받아(history.state.score, history.state.score) DOM Node를 만들때 넣어줌.
-- window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 실행시켜서 화면을 렌더링 함. 게임 시작 이후에 score 페이지로 갔다가 돌아와도 게임이 살아있게 만듦
-- React.Lazy처럼 페이지 라우팅 시 모든 페이지 클래스 인스턴스를 페이지 초기화 로딩때 한번에 생성하지 않고 방문한 페이지만 생성하도록 함.
+- window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 실행시켜서 화면을 렌더링 함. 
+- React.Lazy처럼 페이지 라우팅 시 모든 페이지 클래스 인스턴스를 페이지 초기화 로딩때 한번에 생성하지 않고 방문한 페이지만 생성하도록 함. 
+- 이미 생성한 페이지는 해당 경로로 들어왔을 때 그대로 랜더링함. (게임 시작 이후에 score 페이지로 갔다가 돌아와도 게임이 살아있게 만듦.)
 
 ### 단위 테스트 - Jest
 
@@ -164,7 +165,20 @@ src/components/xxComponent 는 뷰의 역할에만 집중.
   - **api**
     - src/api/fetch.spec.js : Fetch API로 getFetch 함수 mock 테스트
 
-### git 작업방식
+### ETC
+
+#### git 작업방식
 
 - 커밋 메시지 포맷 : .gitmessage
 - 브랜치 전략 : git flow
+
+#### Micro Interaction 요소
+
+- 단어가 틀렸다는 것을 유저 경험에 녹여내기 위해 WordInput 에 입력한 단어가 틀렸을 경우 0.5초 동안
+  - wiggle animation 추가
+  - input background color 변경
+  - 그 다음 input value empty 상태로 변경
+
+#### 디자인 요소 추가
+
+- 유저의 완료 후 성취감을 더 높이기 위해 백그라운드 꽃가루 이펙트를 css로 구현.
