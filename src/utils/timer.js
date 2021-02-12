@@ -14,10 +14,9 @@ class Timer {
    * @param {number} time setInterval에 설정할 interver time
    * @param {boolean} immediate 즉시 실행 여부. true 설정시 즉시 한번 실행함
    */
-  start(callback, time, immediate = false) {
-    if (time) {
-      this.state.seconds = time;
-    }
+  start(callback, time = 0, immediate = false) {
+    if (time <= 0) throw new Error('time 값은 0 보다 커야 합니다.');
+    this.state.seconds = time;
     if (immediate) {
       callback(this.state.seconds);
     }
