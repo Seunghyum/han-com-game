@@ -81,7 +81,7 @@ $ git config commit.template .gitmessage
 - webpack.config.dev.js / webpack.config.prod.js 으로 개발 / 배포 설정 분리.
 - start script를 통해서 hot-loading 적용.
 - build script를 구성하여 /public 폴더에 빌드한 html, js, css를 export.
-- build 한 js 파일이 105KB 이므로 chunck로 나누지 않음.
+- build 한 js 파일이 111KB 이므로 크지 않아 chunck로 나누지 않음.
 
 ### 작업 환경 구성 : Eslint, Prettier, Husky
 
