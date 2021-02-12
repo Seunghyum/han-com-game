@@ -6,7 +6,11 @@
   "scripts": {
     "start": "webpack serve --open --config ./build/webpack.config.dev.js",
     "build": "webpack --config ./build/webpack.config.prod.js",
-    "jest": "jest"
+    "jest": "jest",
+    "cover": "jest --coverage  --silent",
+    "cover:readme": "yarn cover && yarn make-badges",
+    "cover:report": "yarn cover && open ./coverage/lcov-report/index.html",
+    "make-badges": "istanbul-badges-readme"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
@@ -26,6 +30,7 @@
     "history": "^5.0.0",
     "html-webpack-plugin": "^5.0.0",
     "husky": "^4.3.8",
+    "istanbul-badges-readme": "^1.2.0",
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "mini-css-extract-plugin": "^1.3.5",

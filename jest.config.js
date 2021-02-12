@@ -1,5 +1,6 @@
 module.exports = {
   moduleFileExtensions: ['js', 'json'],
+  coverageReporters: ['json-summary', 'text', 'lcov'],
   transform: {
     '^.+\\.(js)?$': 'babel-jest',
   },
