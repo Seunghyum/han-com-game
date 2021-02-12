@@ -3,18 +3,20 @@
 ## 실행 방법
 
 ```SHELL
-// webpack-dev-server 실행
+# webpack-dev-server 실행
 $ yarn start
 
-// 빌드
+# 빌드
 $ yarn build
 
-// 테스트
+# 테스트
 $ yarn jest
 
-// git commit message 포맷 설정
-$ git config commit.template .gitmessage 
+# 테스트 커버리지 리포트 열기
+$ yarn cover:report
 
+# git commit message 포맷 설정
+$ git config commit.template .gitmessage 
 ```
 
 ## 파일 구조
@@ -121,9 +123,16 @@ Husky hook precommit 옵션을 설정하여
 ### 단위 테스트 - Jest
 
 - 테스트 커버리지
+
+| Statements                  | Branches                | Functions                 | Lines                |
+| --------------------------- | ----------------------- | ------------------------- | -------------------- |
+| ![Statements](https://img.shields.io/badge/Coverage-86.76%25-yellow.svg) | ![Branches](https://img.shields.io/badge/Coverage-65.28%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-83.72%25-yellow.svg) | ![Lines](https://img.shields.io/badge/Coverage-91.89%25-brightgreen.svg)    |
+
+- 대상
   - components(CSS 효과 구현을 위한 ConfettiComponent는 제외)
   - utils
   - router
+  - api
 
 - 세부 내용
   - **utils**
