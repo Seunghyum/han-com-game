@@ -141,7 +141,7 @@ Husky hook precommit 옵션을 설정하여
 
 | Statements                  | Branches                | Functions                 | Lines                |
 | --------------------------- | ----------------------- | ------------------------- | -------------------- |
-| ![Statements](https://img.shields.io/badge/Coverage-86.76%25-yellow.svg) | ![Branches](https://img.shields.io/badge/Coverage-65.28%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-83.72%25-yellow.svg) | ![Lines](https://img.shields.io/badge/Coverage-91.89%25-brightgreen.svg)    |
+| ![Statements](https://img.shields.io/badge/Coverage-87.22%25-yellow.svg) | ![Branches](https://img.shields.io/badge/Coverage-65.28%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-86.05%25-yellow.svg) | ![Lines](https://img.shields.io/badge/Coverage-92.59%25-brightgreen.svg)    |
 
 테스트 커버리지 리포트 확인 명령어
 
