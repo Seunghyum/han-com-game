@@ -3,7 +3,7 @@
  */
 
 class ReactiveComponent {
-  constructor(props) {
+  constructor(props = {}) {
     const self = this;
     this.effects = {};
     this.state = new Proxy(props.state || {}, {
