@@ -89,20 +89,30 @@ Husky hook precommit 옵션을 설정하여
 
 이후에 에러 없을 시 커밋할 수 있게 구성.
 
-### UI 렌더링 방식
+### UI 렌더링
 
 - ```<div id="app"></div>```에 페이지 DOM Node를 한번에 렌더링 하는 방식.
   - 페이지를 한번에 메모리에 올리지 않고 방문한 페이지들만 올림 - router.js 확인
 - vDom.js에서 createElement를 래핑하는 함수를 만듦.
   1. render 함수안의 Dom의 위치를 표현
   2. createElement 매서드를 가독성을 높임
+
+### View - ViewModel 분리
+
+src/page는 뷰모델의 역할에만 집중.
+src/components/**Component 는 뷰의 역할에만 집중.
+
+- ReactiveComponent 클래스 정의
+  - 목적 : GamePage가 상속받아 사용. *ViewModel* 역할에 집중할 수 있게하게 위해 만듦. View - ViewModel을 분리해서 View의 디스플레이 로직에 관심없이 page가 state관리와 비즈니스 로직에만 관심있게 하기위해 디자인 함.
+  - 동작방식
+    - Proxy API를 사용하여 state의 속성값을 옵저빙함.
+    - setEffect(Callback, [...stateName]) 함수로 this.state[stateName]값이 변경될 때 Callback을 실행시킴
+    - this.state 변경시에는 this.setState() 매서드를 사용함.
 - ComponentBase 클래스 정의
-  - 주요기능 : UI 컴포넌트를 모듈화 시킬 수 있음
+  - 목적 : *View* 역할. UI 컴포넌트 모듈화를 위한 클래스. ReactiveComponent와는 반대로 전달받은 상태값(props)의 변화에 따라 변경되는 디스플레이 로직에 집중.
+  - 동작 방식
     1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
     2. Dom Attribute의 이전 속성을 비교해 변경시에만 업데이트 함.   ```ComponentBase.updateDomAttribute()```
-- ReactiveComponent 클래스 정의
-  - Proxy API를 사용하여 state의 속성값을 옵저빙함.
-  - setEffect(Callback, [...stateName]) 함수로 this.state[stateName]값이 변경될 때 Callback을 실행시킴
 
 ### 백엔드 API 요청
 
