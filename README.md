@@ -100,7 +100,7 @@ Husky hook precommit 옵션을 설정하여
 ### View - ViewModel 분리
 
 src/page는 뷰모델의 역할에만 집중.
-src/components/**Component 는 뷰의 역할에만 집중.
+src/components/xxComponent 는 뷰의 역할에만 집중.
 
 - ReactiveComponent 클래스 정의
   - 목적 : GamePage가 상속받아 사용. *ViewModel* 역할에 집중할 수 있게하게 위해 만듦. View - ViewModel을 분리해서 View의 디스플레이 로직에 관심없이 page가 state관리와 비즈니스 로직에만 관심있게 하기위해 디자인 함.
