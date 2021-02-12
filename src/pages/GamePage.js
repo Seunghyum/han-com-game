@@ -2,11 +2,11 @@ import { historyRouter, ROUTE_PATH } from '~src/router';
 import { div, p, span } from '~utils/vDom';
 import Timer from '~utils/timer';
 import { getAverage } from '~utils/getAverage';
-import ReactiveComponent from '~utils/ReactiveComponent';
+import ReactiveComponentBase from '~src/components/base/ReactiveComponentBase';
 
 import { getFetch } from '~api/fetch';
 
-import ComponentBase from '~components/ComponentBase';
+import ComponentBase from '~src/components/base/ComponentBase';
 import WordInput from '~components/WordInput';
 import GameControlButton from '~components/GameControlButton';
 
@@ -23,7 +23,7 @@ const initState = {
   score: '-',
 };
 
-class GamePage extends ReactiveComponent {
+class GamePage extends ReactiveComponentBase {
   constructor() {
     super({
       state: {

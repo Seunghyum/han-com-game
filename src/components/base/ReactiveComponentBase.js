@@ -1,8 +1,8 @@
 /**
- * 변수에 반응하여 등록된 콜백을 실행하는 반응형 컴포넌트를 사용할때 쓸 클래스 정의
+ * State 값을 관찰하여 setEffect 매서드에 등록한 콜백을 실행시키기 위한 클래스
  */
 
-class ReactiveComponent {
+class ReactiveComponentBase {
   constructor(props = {}) {
     const self = this;
     this.effects = {};
@@ -49,4 +49,4 @@ class ReactiveComponent {
   }
 }
 
-export default ReactiveComponent;
+export default ReactiveComponentBase;

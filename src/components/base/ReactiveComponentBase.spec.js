@@ -1,10 +1,10 @@
-import ReactiveComponent from './ReactiveComponent';
-import { div } from './vDom';
+import ReactiveComponentBase from './ReactiveComponentBase';
+import { div } from '~utils/vDom';
 
 const testId = 'test';
 const initScore = 0;
 
-class MockComponent extends ReactiveComponent {
+class MockComponent extends ReactiveComponentBase {
   constructor() {
     super({
       state: {
@@ -25,7 +25,7 @@ class MockComponent extends ReactiveComponent {
   }
 }
 
-describe('ReactiveComponent 테스트', () => {
+describe('ReactiveComponentBase 테스트', () => {
   describe('변수값을 추적하여 변경시 등록된 콜백이 실행된다. ', () => {
     const $MockComponent = new MockComponent();
 

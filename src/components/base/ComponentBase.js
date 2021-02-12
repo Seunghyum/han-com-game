@@ -10,8 +10,9 @@ const domAttributes = new Set([
 ]);
 
 /**
- * ComponentBase의 주요 기능
- * 1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
+ * 목적 : 컴포넌트 모듈화를 위해 도입. DOM Element를 조작하는 컴포넌트 클래스 테스트.
+ * 주요 기능
+ * 1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. -> 가독성을 높임.
  * 2. Dom Attribute의 이전 속성을 비교해 변경시에만 업데이트 함.
  */
 class ComponentBase {
