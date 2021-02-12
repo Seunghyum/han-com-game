@@ -1,4 +1,4 @@
-import ComponentBase from './ComponentBase';
+import ComponentBase from '~components/base/ComponentBase';
 import { button } from '~utils/vDom';
 
 class GameControlButton extends ComponentBase {

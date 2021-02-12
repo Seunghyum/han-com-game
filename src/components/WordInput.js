@@ -1,4 +1,4 @@
-import ComponentBase from './ComponentBase';
+import ComponentBase from '~components/base/ComponentBase';
 import { input } from '~utils/vDom';
 
 class WordInput extends ComponentBase {
