@@ -4,9 +4,6 @@ import { input } from '~utils/vDom';
 class WordInput extends ComponentBase {
   constructor() {
     super();
-    this.isWrong = false;
-    this.isClean = false;
-    this.isFocus = false;
     this.element = input({
       placeholder: '입력',
       className: 'game-control__input',
