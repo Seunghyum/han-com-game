@@ -15,12 +15,16 @@ $ yarn jest
 # 테스트 커버리지 리포트 열기
 $ yarn cover:report
 
+# jsdoc 실행
+$ yarn doc
+
 # git commit message 포맷 설정
 $ git config commit.template .gitmessage 
 ```
 
 ## 파일 구조
-```
+
+```TREE
 📦 build
  ┃ ┣ 📜 webpack.config.base.js
  ┃ ┣ 📜 webpack.config.dev.js 
@@ -139,6 +143,12 @@ Husky hook precommit 옵션을 설정하여
 | --------------------------- | ----------------------- | ------------------------- | -------------------- |
 | ![Statements](https://img.shields.io/badge/Coverage-86.76%25-yellow.svg) | ![Branches](https://img.shields.io/badge/Coverage-65.28%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-83.72%25-yellow.svg) | ![Lines](https://img.shields.io/badge/Coverage-91.89%25-brightgreen.svg)    |
 
+테스트 커버리지 리포트 확인 명령어
+
+```SHELL
+$ yarn cover:report
+```
+
 - 대상
   - components(CSS 효과 구현을 위한 ConfettiComponent는 제외)
   - utils
@@ -182,3 +192,11 @@ Husky hook precommit 옵션을 설정하여
 #### 디자인 요소 추가
 
 - 유저의 완료 후 성취감을 더 높이기 위해 백그라운드 꽃가루 이펙트를 css로 구현.
+
+#### JSdoc
+
+- jsdoc으로 구현한 컴포넌트 클래스, 유틸 함수들을 편하게 보기위해 문서화 툴 jsdoc을 사용함.
+
+```SHELL
+$ yarn doc
+```
