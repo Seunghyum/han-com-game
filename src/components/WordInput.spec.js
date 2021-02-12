@@ -3,6 +3,7 @@ import WordInput from './WordInput';
 describe('WordInput 컴포넌트 테스트', () => {
   const testData = {
     id: 'test',
+    type: 'text',
     className: 'word-input-test',
     value: 'test value',
     placeholder: 'test placeholder',
@@ -32,5 +33,11 @@ describe('WordInput 컴포넌트 테스트', () => {
     setTimeout(() => {
       expect($WordInput.element.classList.contains('error')).toBe(false);
     }, 1000);
+  });
+
+  it('isFocus = true 일 경우', () => {
+    $WordInput.updateState({ isFocus: true });
+
+    setTimeout(() => expect(target).toHaveFocus(), 100);
   });
 });

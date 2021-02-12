@@ -14,4 +14,5 @@ module.exports = {
     '^~pages(.*)$': '<rootDir>/src/pages$1',
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/jsdoc/'],
+  setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
 };
