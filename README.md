@@ -151,7 +151,7 @@ Husky hook precommit 옵션을 설정하여
 
 | Statements                  | Branches                | Functions                 | Lines                |
 | --------------------------- | ----------------------- | ------------------------- | -------------------- |
-| ![Statements](https://img.shields.io/badge/Coverage-93.94%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/Coverage-77.46%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-90.7%25-brightgreen.svg) | ![Lines](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)    |
+| ![Statements](https://img.shields.io/badge/Coverage-93.23%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/Coverage-78.08%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-90.7%25-brightgreen.svg) | ![Lines](https://img.shields.io/badge/Coverage-99.07%25-brightgreen.svg)    |
 
 - 대상
   - components(CSS 효과 구현을 위한 ConfettiComponent는 제외)

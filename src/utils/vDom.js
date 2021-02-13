@@ -24,6 +24,8 @@ function makeElement(type, textOrPropsOrChild, ...otherChildren) {
     el.appendChild(textOrPropsOrChild);
   } else if (typeof textOrPropsOrChild === `string`) {
     appendText(el, textOrPropsOrChild);
+  } else if (typeof textOrPropsOrChild === `number`) {
+    appendText(el, textOrPropsOrChild);
   } else if (typeof textOrPropsOrChild === `object`) {
     Object.keys(textOrPropsOrChild).forEach((propName) => {
       el[propName] = textOrPropsOrChild[propName];

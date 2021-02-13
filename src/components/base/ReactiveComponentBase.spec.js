@@ -40,7 +40,7 @@ describe('ReactiveComponentBase 테스트', () => {
             score: initScore,
           },
         });
-        this.element = div({ id: testId }, initScore.toString());
+        this.element = div({ id: testId }, initScore);
 
         this.setEffect((score) => (this.element.textContent = score), [
           'score',

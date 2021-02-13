@@ -36,7 +36,6 @@ class GamePage extends ReactiveComponentBase {
     this.timer = new Timer();
     this.questions = [];
     this.qIndex = 0;
-    this.score = initState.score;
     this.allTimes = [];
 
     this.initEffects();
@@ -70,15 +69,14 @@ class GamePage extends ReactiveComponentBase {
 
     const { text: questionText, second } = this.questions[qIndex];
     this.setState({ questionText });
-
     this.timer.start(
       (time) => {
-        let score = this.state.score;
         if (!time) {
-          this.setNextQuestion(qIndex + 1);
+          let { score } = this.state;
           score--;
-        }
-        this.setState({ score, time });
+          this.setState({ score });
+          this.setNextQuestion(qIndex + 1);
+        } else this.setState({ time });
       },
       second,
       true
@@ -137,11 +135,7 @@ class GamePage extends ReactiveComponentBase {
               { className: 'question-board__time' },
               `남은 시간 : `,
               $Time.render({
-                element: span(
-                  this.state.isStart
-                    ? this.state.time.toString()
-                    : initState.time
-                ),
+                element: span(this.state.time),
                 className: 'question-board__time-number',
               }),
               ' 초'
@@ -150,11 +144,7 @@ class GamePage extends ReactiveComponentBase {
               { className: 'question-board__score' },
               `점수 : `,
               $Score.render({
-                element: span(
-                  this.state.isStart
-                    ? this.state.score.toString()
-                    : initState.score
-                ),
+                element: span(this.state.score),
                 className: 'question-board__score-number',
               }),
               ' 점'
@@ -162,11 +152,7 @@ class GamePage extends ReactiveComponentBase {
           ]),
           $QuestionText.render({
             className: 'question-text',
-            element: p(
-              this.state.isStart
-                ? this.state.questionText
-                : initState.questionText
-            ),
+            element: p(this.state.questionText),
           }),
         ]),
         div({ className: 'game-control' }, [
