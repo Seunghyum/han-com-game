@@ -4,7 +4,6 @@ import { button } from '~utils/vDom';
 class GameControlButton extends ComponentBase {
   constructor() {
     super();
-    this.isStart = false;
     this.element = button({
       type: 'button',
       className: 'game-control__button',
