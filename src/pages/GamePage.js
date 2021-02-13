@@ -39,6 +39,10 @@ class GamePage extends ReactiveComponentBase {
     this.score = initState.score;
     this.allTimes = [];
 
+    this.initEffects();
+  }
+
+  initEffects() {
     this.setEffect((isStart) => $GameControlButton.updateState({ isStart }), [
       'isStart',
     ]);
