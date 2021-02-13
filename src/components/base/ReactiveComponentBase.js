@@ -42,8 +42,6 @@ class ReactiveComponentBase {
    */
   setState(obj) {
     for (const key in obj) {
-      if (this.state[key] === undefined)
-        throw Error(`${key} is not defined in this.state`);
       this.state[key] = obj[key];
     }
   }
