@@ -12,6 +12,9 @@ $ yarn build
 # 테스트
 $ yarn jest
 
+# 테스트 커버리지 확인 ($ jest --coverage)
+$ yarn cover:report
+
 # 테스트 커버리지 리포트 열기
 $ yarn cover:report
 
@@ -40,16 +43,16 @@ $ git config commit.template .gitmessage
  ┃ ┗ 📜 fetch.spec.js
  ┃
  ┣ 📂 components       // UI 컴포넌트
- ┃ ┣ 📂 base           // UI 컴포넌트 기반 클래스
- ┃ ┃ ┣ 📜 ComponentBase.js // 모듈화를 위한 클래스
+ ┃ ┣ 📂 base           // 컴포넌트 기반 클래스
+ ┃ ┃ ┣ 📜 ComponentBase.js // UI 컴포넌트 모듈화를 위한 클래스
  ┃ ┃ ┣ 📜 ComponentBase.spec.js
- ┃ ┃ ┣ 📜 ReactiveComponentBase.js // state 값의 Observer 패턴을 위한 클래스
+ ┃ ┃ ┣ 📜 ReactiveComponentBase.js // state 값의 Proxy 패턴을 위한 클래스
  ┃ ┃ ┗ 📜 ReactiveComponentBase.spec.js
  ┃ ┃
  ┃ ┣ 📜 ConfetiComponent.js // 완료페이지 꽃가루 효과를 위한 UI 모듈
- ┃ ┣ 📜 GameControlButton.js
- ┃ ┣ 📜 GameControlButton.spec.js
- ┃ ┣ 📜 WordInput.js
+ ┃ ┣ 📜 GameControlButton.js      // 시작 / 초기화 버튼
+ ┃ ┣ 📜 GameControlButton.spec.js  
+ ┃ ┣ 📜 WordInput.js              // 단어 입력 인풋 폼
  ┃ ┗ 📜 WordInput.spec.js
  ┃  
  ┣ 📂 pages
@@ -62,7 +65,7 @@ $ git config commit.template .gitmessage
  ┃ ┗ 📜 reset.scss
  ┃
  ┣ 📂 utils
- ┃ ┣ 📜 getAverage.js
+ ┃ ┣ 📜 getAverage.js       // array의 평균을 구하는 함수
  ┃ ┣ 📜 getAverage.spec.js
  ┃ ┣ 📜 timer.js            // 타이머 구현 클래스
  ┃ ┣ 📜 timer.spec.js
@@ -79,9 +82,11 @@ $ git config commit.template .gitmessage
 ### 환경 구성 : Webpack
 
 - webpack.config.dev.js / webpack.config.prod.js 으로 개발 / 배포 설정 분리.
-- start script를 통해서 hot-loading 적용.
-- build script를 구성하여 /public 폴더에 빌드한 html, js, css를 export.
-- build 한 js 파일이 111KB 이므로 크지 않아 chunck로 나누지 않음.
+- 공동 설정은 webpack.config.base.js
+- ```$ yarn start``` script를 통해서 hot-loading 적용.
+- ```$ yarn build``` script를 구성하여 /public 폴더에 빌드한 html, js, css를 export.
+- build 한 js 파일이 111KB. 크지 않아 chunck로 나누지 않음.
+- .env 파일 환경 설정은 필요 없어서 설정 안함.
 
 ### 작업 환경 구성 : Eslint, Prettier, Husky
 
@@ -96,8 +101,14 @@ Husky hook precommit 옵션을 설정하여
 ### UI 렌더링
 
 - ```<div id="app"></div>```에 페이지 DOM Node를 한번에 렌더링 하는 방식.
-  - 페이지를 한번에 메모리에 올리지 않고 방문한 페이지들만 올림 - router.js 확인
-- vDom.js에서 createElement를 래핑하는 함수를 만듦.
+  - 페이지 클래스를 한번에 생성하지 않고 방문한 페이지들만 생성
+    ```javascript
+    function getPathLazy(pathName) {
+      if (!routesMemo[pathName]) routesMemo[pathName] = routeMap[pathName]();
+      return routesMemo[pathName];
+    }
+    ```
+- vDom.js에 createElement를 래핑하는 함수를 만듦.
   1. render 함수안의 Dom의 위치를 표현
   2. createElement 매서드를 가독성을 높임
 
@@ -109,9 +120,9 @@ Husky hook precommit 옵션을 설정하여
 - ReactiveComponent 클래스 정의
   - 목적 : GamePage가 상속받아 사용. *ViewModel* 역할에 집중할 수 있게하게 위해 만듦. View - ViewModel을 분리해서 View의 디스플레이 로직에 관심없이 page가 state관리와 비즈니스 로직에만 관심있게 하기위해 디자인 함.
   - 동작방식
-    - Proxy API를 사용하여 Proxy 패턴으로 state의 속성값을 변경할때 특정액션(콜백)을 실행함.
+    - Proxy API를 사용하여 Proxy 패턴으로 state의 속성값을 변경할때 setEffect함수로 등록된 특정액션(콜백)을 실행함.
     - setEffect(Callback, [...stateName]) 함수로 this.state[stateName]값이 변경될 때 Callback을 실행시킴
-    - this.state 변경시에는 this.setState() 매서드를 사용함.
+    -  좀 더 명시적으로 상태값을 수정하기 위해 this.state 변경시에 this.setState() 매서드를 사용함.
 - ComponentBase 클래스 정의
   - 목적 : *View* 역할. UI 컴포넌트 모듈화를 위한 클래스. ReactiveComponent와는 반대로 전달받은 상태값(props)의 변화에 따라 변경되는 디스플레이 로직에 집중.
   - 동작 방식
@@ -120,7 +131,7 @@ Husky hook precommit 옵션을 설정하여
 
 ### 백엔드 API 요청
 
-- 요청 API가 하나만 존재하므로 env 파일로 관리 안하고 요청시 url 만 넣으면 작동하게 진행.
+- 요청 API가 하나만 존재하므로 .env 같은 환경변수로 관리 안하고 요청시 url 만 넣으면 작동하게 진행.
   코드 가독성을 높이기 위해 src/api/fetch.js의 getFetch 함수로 정의.
 
 ### 라우팅
@@ -131,13 +142,12 @@ Husky hook precommit 옵션을 설정하여
     historyRouter(ROUTE_PATH.ScorePage, { score, averageTime });
   ```
   완료 페이지에선 위 데이터(```score```, ```avewrageTime```)를 받아(history.state.score, history.state.score) DOM Node를 만들때 넣어줌.
-- window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 실행시켜서 화면을 렌더링 함. 
-- React.Lazy처럼 페이지 라우팅 시 모든 페이지 클래스 인스턴스를 페이지 초기화 로딩때 한번에 생성하지 않고 방문한 페이지만 생성하도록 함. 
-- 이미 생성한 페이지는 해당 경로로 들어왔을 때 그대로 랜더링함. (게임 시작 이후에 score 페이지로 갔다가 돌아와도 게임이 살아있게 만듦.)
+- window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 실행시켜서 화면을 렌더링 함.
+- 이미 생성한 페이지는 해당 경로로 들어왔을 때 이전 상태 그대로 랜더링함. (게임 시작 이후에 score 페이지로 갔다가 돌아와도 게임이 살아있게 만듦.)
 
 ### 단위 테스트 - Jest
 
-- 테스트 커버리지
+- 테스트 커버리지 (```$ yarn cover``` 의 결과)
 
 | Statements                  | Branches                | Functions                 | Lines                |
 | --------------------------- | ----------------------- | ------------------------- | -------------------- |
@@ -151,11 +161,11 @@ Husky hook precommit 옵션을 설정하여
 
 - 세부 내용
   - **utils**
-    - src/utils/vDom.spec.js : vDom 함수 테스트
-    - src/utils/timer.spec.js : setInterval을 wrapping한 클래스 테스트
-    - src/utils/getAverage.spec.js : Array에서 평균값을 리턴하는 함수 테스트
+    - src/utils/vDom.spec.js : createElement를 추상화하여 쓰기 위한 vDom 함수 테스트
+    - src/utils/timer.spec.js : 남은 시간 카운트를 위한 클래스인 Timer의 테스트
+    - src/utils/getAverage.spec.js : [...걸린시간]의 평균 계산을 위한, Array에서 평균값을 리턴하는 함수 테스트
   - **components**
-    - src/components/base/ReactiveComponentBase.spec.js : State 값을 관찰하여 setEffect 매서드에 등록한 콜백을 실행시키기 위한 클래스
+    - src/components/base/ReactiveComponentBase.spec.js : State 값을 Proxy하여 setEffect 매서드로 등록한 콜백을 실행시키기 위한 클래스
     - src/components/base/ComponentBase.js
       - 목적 : 컴포넌트 모듈화를 위해 도입. DOM Element를 조작하는 컴포넌트 클래스 테스트.
       - 점수판, 남은 시간, 문제 단어에 사용.
@@ -167,7 +177,7 @@ Husky hook precommit 옵션을 설정하여
   - **router**
     - src/router.spec.js : History API가 의도한 방식대로 작동하는지 mock 테스트
   - **api**
-    - src/api/fetch.spec.js : Fetch API로 getFetch 함수 mock 테스트
+    - src/api/fetch.spec.js : Fetch API로 만든 getFetch 함수의 mock 테스트
 
 테스트 커버리지 리포트 확인 명령어
 
