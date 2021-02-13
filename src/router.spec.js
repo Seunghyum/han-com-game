@@ -1,25 +1,34 @@
-const { createBrowserHistory } = require('history');
+import { historyRouter, ROUTE_PATH } from './router';
+
+const history = {};
+
+jest.mock(
+  './router',
+  () => {
+    return {
+      __esModule: true,
+      historyRouter: (url, data) => {
+        history.data = data;
+        history.pathName = url;
+        history.url = url;
+      },
+      ROUTE_PATH: {
+        GamePage: '/',
+        ScorePage: '/score',
+      },
+    };
+  },
+  { virtual: true }
+);
 
 describe('history.push(path, data) 테스트', () => {
-  const history = createBrowserHistory(/* ... */);
-  jest.spyOn(history, 'push');
-  test('location.pathname가 path 설정 값과 같아야한다', () => {
-    const pathName = '/store';
+  it('historyRouter', () => {
+    const url = ROUTE_PATH.ScorePage;
+    const data = { test: 'hello world' };
+    historyRouter(url, data);
 
-    history.push(pathName);
-
-    expect(location.pathname).toBe(pathName);
-  });
-
-  test('histroy.location.state가 data 설정 값과 같아야한다', () => {
-    const score = 130;
-    const averageTime = 500;
-    const pathName = '/store';
-
-    history.push(pathName, { score, averageTime });
-
-    expect(location.pathname).toBe(pathName);
-    expect(history.location.state.score).toBe(score);
-    expect(history.location.state.averageTime).toBe(averageTime);
+    expect(history.data.text).toEqual(data.text);
+    expect(history.pathName).toEqual(url);
+    expect(history.url).toEqual(url);
   });
 });
