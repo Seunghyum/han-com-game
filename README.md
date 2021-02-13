@@ -141,13 +141,7 @@ Husky hook precommit 옵션을 설정하여
 
 | Statements                  | Branches                | Functions                 | Lines                |
 | --------------------------- | ----------------------- | ------------------------- | -------------------- |
-| ![Statements](https://img.shields.io/badge/Coverage-92.54%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/Coverage-73.97%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-90.7%25-brightgreen.svg) | ![Lines](https://img.shields.io/badge/Coverage-98.15%25-brightgreen.svg)    |
-
-테스트 커버리지 리포트 확인 명령어
-
-```SHELL
-$ yarn cover:report
-```
+| ![Statements](https://img.shields.io/badge/Coverage-93.94%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/Coverage-77.46%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-90.7%25-brightgreen.svg) | ![Lines](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)    |
 
 - 대상
   - components(CSS 효과 구현을 위한 ConfettiComponent는 제외)
@@ -175,6 +169,13 @@ $ yarn cover:report
   - **api**
     - src/api/fetch.spec.js : Fetch API로 getFetch 함수 mock 테스트
 
+테스트 커버리지 리포트 확인 명령어
+
+```SHELL
+$ yarn cover:report
+```
+
+![yarn cover:report](./READwithME/yarn-cover-report.png)
 ### ETC
 
 #### git 작업방식
@@ -200,3 +201,5 @@ $ yarn cover:report
 ```SHELL
 $ yarn doc
 ```
+
+![yarn doc](READwithME/yarn-doc.png)
