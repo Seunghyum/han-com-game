@@ -13,7 +13,7 @@ $ yarn build
 $ yarn jest
 
 # 테스트 커버리지 확인 ($ jest --coverage)
-$ yarn cover:report
+$ yarn cover
 
 # 테스트 커버리지 리포트 열기
 $ yarn cover:report
@@ -98,20 +98,6 @@ Husky hook precommit 옵션을 설정하여
 
 이후에 에러 없을 시 커밋할 수 있게 구성.
 
-### UI 렌더링
-
-- ```<div id="app"></div>```에 페이지 DOM Node를 한번에 렌더링 하는 방식.
-  - 페이지 클래스를 한번에 생성하지 않고 방문한 페이지들만 생성
-    ```javascript
-    function getPathLazy(pathName) {
-      if (!routesMemo[pathName]) routesMemo[pathName] = routeMap[pathName]();
-      return routesMemo[pathName];
-    }
-    ```
-- vDom.js에 createElement를 래핑하는 함수를 만듦.
-  1. render 함수안의 Dom의 위치를 표현
-  2. createElement 매서드를 가독성을 높임
-
 ### View - ViewModel 분리
 
 > src/page는 뷰모델의 역할에만 집중.
@@ -129,6 +115,20 @@ Husky hook precommit 옵션을 설정하여
     1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
     2. Dom Attribute의 이전 속성을 비교해 변경시에만 업데이트 함.   ```ComponentBase.updateDomAttribute()```
 
+### UI 렌더링
+
+- ```<div id="app"></div>```에 페이지 DOM Node를 한번에 렌더링 하는 방식.
+  - 페이지 클래스를 한번에 생성하지 않고 방문한 페이지들만 생성
+    ```javascript
+    function getPathLazy(pathName) {
+      if (!routesMemo[pathName]) routesMemo[pathName] = routeMap[pathName]();
+      return routesMemo[pathName];
+    }
+    ```
+- vDom.js에 createElement를 래핑하는 함수를 만듦.
+  1. render 함수안의 Dom의 위치를 표현
+  2. createElement 매서드를 가독성을 높임
+
 ### 백엔드 API 요청
 
 - 요청 API가 하나만 존재하므로 .env 같은 환경변수로 관리 안하고 요청시 url 만 넣으면 작동하게 진행.
@@ -143,9 +143,9 @@ Husky hook precommit 옵션을 설정하여
   ```
   완료 페이지에선 위 데이터(```score```, ```avewrageTime```)를 받아(history.state.score, history.state.score) DOM Node를 만들때 넣어줌.
 - window.onpopstate 에 페이지 전환시(history.back, history.go, history.forward) renderHTML 함수를 실행시켜서 화면을 렌더링 함.
-- 이미 생성한 페이지는 해당 경로로 들어왔을 때 이전 상태 그대로 랜더링함. (게임 시작 이후에 score 페이지로 갔다가 돌아와도 게임이 살아있게 만듦.)
+- 이미 생성한 페이지는 해당 경로로 들어왔을 때 이전 상태 그대로 랜더링함. (게임 시작 이후에 score 페이지로 갔다가 뒤로가기를 눌러도 게임이 살아있게 만듦.)
 
-### 단위 테스트 - Jest
+### 단위 테스트 - jest & jest-dom
 
 - 테스트 커버리지 (```$ yarn cover``` 의 결과)
 
