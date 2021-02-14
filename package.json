@@ -30,7 +30,6 @@
     "eslint-plugin-prettier": "^3.3.1",
     "favicons": "^6.2.0",
     "favicons-webpack-plugin": "^5.0.1",
-    "history": "^5.0.0",
     "html-webpack-plugin": "^5.0.0",
     "husky": "^4.3.8",
     "istanbul-badges-readme": "^1.2.0",
