@@ -9,6 +9,11 @@ class ScorePage {
   render() {
     const { handleRestartGame } = this;
 
+    if (!history.state) {
+      alert('게임을 진행하지 않았습니다. 게임을 진행해주세요');
+      return historyRouter(ROUTE_PATH.GamePage);
+    }
+
     return div({ className: 'container' }, [
       ConfetiComponent(),
       div({ className: 'content-wrapper' }, [

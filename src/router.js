@@ -20,7 +20,8 @@ const routeMap = {
 
 const renderHTML = (route) => {
   $app.innerHTML = '';
-  $app.appendChild(route.render());
+  const renderNode = route.render();
+  if (renderNode) $app.appendChild(renderNode);
 };
 
 export const initRoute = (pathName = window.location.pathname) => {
