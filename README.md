@@ -163,7 +163,7 @@ Husky hook precommit 옵션을 설정하여
   - **utils**
     - src/utils/vDom.spec.js : createElement를 추상화하여 쓰기 위한 vDom 함수 테스트
     - src/utils/timer.spec.js : 남은 시간 카운트를 위한 클래스인 Timer의 테스트
-    - src/utils/getAverage.spec.js : [...걸린시간]의 평균 계산을 위한, Array에서 평균값을 리턴하는 함수 테스트
+    - src/utils/getAverage.spec.js : ```[...걸린시간]```의 평균 계산을 위한, Array에서 평균값을 리턴하는 함수 테스트
   - **components**
     - src/components/base/ReactiveComponentBase.spec.js : State 값을 Proxy하여 setEffect 매서드로 등록한 콜백을 실행시키기 위한 클래스
     - src/components/base/ComponentBase.js
@@ -192,6 +192,7 @@ $ yarn cover:report
 
 - 커밋 메시지 포맷 : .gitmessage
 - 브랜치 전략 : git flow
+- 150여개의 커밋
 
 #### Micro Interaction 요소
 
