@@ -59,7 +59,7 @@ class ComponentBase {
   setFocus(focus) {
     if (!focus) return;
 
-    setTimeout(() => this.element.focus(), 0);
+    this.element.focus();
   }
 
   /**

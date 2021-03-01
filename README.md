@@ -1,5 +1,20 @@
 # TypingGame
 
+주어진 단어가 표시되면 input에 단어를 정해진 시간 내에 입력하여 점수를 획득하는 어플리케이션 개발
+
+## 제한사항
+
+- 기술 스택
+  - Vanila js
+  - 라이브러리는 개발환경에 필요한 설정만.
+  - Webpack으로 환경 구성
+  - unit 테스트는 라이브러리 사용가능.
+  - History API를 사용하여 페이지 라우팅.
+- 제한 시간 : 일주일
+- 실제 작업 시간
+  - 3일 기능 개발
+  - 3일 문서, 리펙토링(설연휴)
+
 ## 실행 방법
 
 ```SHELL
@@ -186,7 +201,7 @@ $ yarn cover:report
 ```
 
 ![yarn cover:report](./READwithME/yarn-cover-report.png)
-### ETC
+## ETC
 
 #### git 작업방식
 
@@ -214,3 +229,48 @@ $ yarn doc
 ```
 
 ![yarn doc](READwithME/yarn-doc.png)
+
+### 과제 설명
+
+- ✅  확장성, 모듈화, 선언형 프로그래밍에 초점.
+- ✅  ViewModel과 컨테이너 역할을하는 GamePage, ScorePage 와 View와 프레즌테이션 컴포넌트 역할을 할 components로 분화.
+
+### 아쉬운 점
+
+- ✅  리액트의 Reconciliation(재조정) 과정이 없어서 효율적이지 않음. 리플로우, 리페인팅이 많이 일어남. 추상화한다는 의미에서의 가상돔 개념만 가져왔음.
+- ✅  오프스크린 컴포넌트의 메모리 해제 - 사용하지 않는 route의 메모리 해제 기능이 없음. 앱이 커질 것을 감안해 가비지 컬렉션을 잘 하기 위해 추가적으로 사용하지않은 라우트를 해제하는 로직을 구현해야 할 것 같음.
+
+### 리엑트 따라잡기
+
+[링크](https://velog.io/@xortm854/React-Hooks-%EB%8F%99%EC%9E%91-%EB%B0%A9%EB%B2%95)
+
+```javascript
+const React = (function(){
+  const hooks = [];
+  let currentHook = 0;
+  return {
+    render(Component){
+      const component = Component();
+      component.render();
+      return component;
+    },
+    useState(initialValue){
+      hooks[currentHook] = hooks[currentHook] || initialValue;
+      const setState = function(newValue){
+      	hooks[currentHook] = newValue;
+      }
+      return [hooks[currentHook++], setState];
+    },
+    useEffect(callback,newList){
+      const checkAlways = !newList //newList값이 특정되지않았으면 매번 Callback 실행
+      const list = hooks[currentHook];
+      const checkList = list ? !list.every((now,idx)=> now === newList[idx]): true;
+      if(checkAlways || checkList){
+        callback();
+        hooks[currentHook] = newList;
+      }
+      currentHook++;
+    }
+  }
+})()
+```

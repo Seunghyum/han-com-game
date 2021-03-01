@@ -20,11 +20,11 @@ class ScorePage {
         p({ className: 'complete-banner' }, 'Mission Complete!'),
         p(
           { className: 'point-banner' },
-          `당신의 점수는 ${history.state.score}점입니다`
+          `당신의 점수는 ${history.state.score}점입니다`,
         ),
         p(
           { className: 'average-time-banner' },
-          `단어당 평균 답변 시간은 ${history.state.averageTime}초 입니다.`
+          `단어당 평균 답변 시간은 ${history.state.averageTime}초 입니다.`,
         ),
         div(
           { className: 'average-time-banner-wrapper' },
@@ -34,8 +34,8 @@ class ScorePage {
               className: 'game-control__button',
               onclick: handleRestartGame,
             },
-            '다시시작'
-          )
+            '다시시작',
+          ),
         ),
       ]),
     ]);

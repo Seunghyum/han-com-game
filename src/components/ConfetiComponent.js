@@ -5,7 +5,7 @@ function ConfettiBox() {
     { className: 'confetti' },
     Array(18)
       .fill(null)
-      .map(() => div({ className: 'confetti-piece' }))
+      .map(() => div({ className: 'confetti-piece' })),
   );
 }
 
