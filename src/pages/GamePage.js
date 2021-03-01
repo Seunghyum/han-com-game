@@ -38,6 +38,9 @@ class GamePage extends ReactiveComponentBase {
     this.qIndex = 0;
     this.allTimes = [];
 
+    this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
+    this.handleStartBtn = this.handleStartBtn.bind(this);
+
     this.initEffects();
   }
 
@@ -49,7 +52,7 @@ class GamePage extends ReactiveComponentBase {
     this.setEffect((time) => $Time.update({ textContent: time }), ['time']);
     this.setEffect(
       (questionText) => $QuestionText.update({ textContent: questionText }),
-      ['questionText']
+      ['questionText'],
     );
   }
 
@@ -79,17 +82,15 @@ class GamePage extends ReactiveComponentBase {
         } else this.setState({ time });
       },
       second,
-      true
+      true,
     );
   }
 
   initGameSetting() {
     this.timer.finish(() => {
       this.setState({
-        time: initState.time,
+        ...initState,
         isStart: false,
-        score: initState.score,
-        questionText: initState.questionText,
       });
     });
     $WordInput.updateState({ isClean: true });
@@ -101,7 +102,7 @@ class GamePage extends ReactiveComponentBase {
       this.setState({ isStart: true, questionText: 'Start!' });
       try {
         const result = await getFetch(
-          'https://my-json-server.typicode.com/kakaopay-fe/resources/words'
+          'https://my-json-server.typicode.com/kakaopay-fe/resources/words',
         );
         this.questions = result;
         this.setState({ score: result.length });
@@ -138,7 +139,7 @@ class GamePage extends ReactiveComponentBase {
                 element: span(this.state.time),
                 className: 'question-board__time-number',
               }),
-              ' 초'
+              ' 초',
             ),
             p(
               { className: 'question-board__score' },
@@ -147,7 +148,7 @@ class GamePage extends ReactiveComponentBase {
                 element: span(this.state.score),
                 className: 'question-board__score-number',
               }),
-              ' 점'
+              ' 점',
             ),
           ]),
           $QuestionText.render({
@@ -159,14 +160,14 @@ class GamePage extends ReactiveComponentBase {
           div(
             $WordInput.render({
               disabled: !this.state.isStart,
-              onkeyup: handleInputKeyUp.bind(this),
-            })
+              onkeyup: handleInputKeyUp,
+            }),
           ),
           $GameControlButton.render({
-            onclick: handleStartBtn.bind(this),
+            onclick: handleStartBtn,
           }),
         ]),
-      ])
+      ]),
     );
   }
 }
