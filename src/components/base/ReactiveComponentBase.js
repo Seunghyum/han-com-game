@@ -29,11 +29,10 @@ class ReactiveComponentBase {
    * @param {Function} callback
    * @param {string[]} targetValueNames
    */
-  setEffect(callback, targetValueNames = []) {
-    targetValueNames.forEach((name) => {
-      if (this.effects[name] === undefined) this.effects[name] = [];
-      this.effects[name].push(callback);
-    });
+  setEffect(callback, targetValueNames) {
+    if (this.effects[targetValueNames] === undefined)
+      this.effects[targetValueNames] = [];
+    this.effects[targetValueNames].push(callback);
   }
 
   /**

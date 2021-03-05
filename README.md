@@ -1,19 +1,14 @@
-# TypingGame
+# 타자게임
 
 주어진 단어가 표시되면 input에 단어를 정해진 시간 내에 입력하여 점수를 획득하는 어플리케이션 개발
 
-## 제한사항
+## 기술 스택
 
-- 기술 스택
-  - Vanila js
-  - 라이브러리는 개발환경에 필요한 설정만.
-  - Webpack으로 환경 구성
-  - unit 테스트는 라이브러리 사용가능.
-  - History API를 사용하여 페이지 라우팅.
-- 제한 시간 : 일주일
-- 실제 작업 시간
-  - 3일 기능 개발
-  - 3일 문서, 리펙토링(설연휴)
+- Vanila js
+- 라이브러리는 개발환경에 필요한 설정만.
+- Webpack으로 환경 구성
+- unit 테스트는 라이브러리 사용가능.
+- History API를 사용하여 페이지 라우팅.
 
 ## 실행 방법
 
@@ -92,9 +87,7 @@ $ git config commit.template .gitmessage
  ┗ 📜 router.spec.js
 ```
 
-## 문제 해결 전략
-
-### 환경 구성 : Webpack
+## 환경 구성 : Webpack
 
 - webpack.config.dev.js / webpack.config.prod.js 으로 개발 / 배포 설정 분리.
 - 공동 설정은 webpack.config.base.js
@@ -103,7 +96,7 @@ $ git config commit.template .gitmessage
 - build 한 js 파일이 111KB. 크지 않아 chunck로 나누지 않음.
 - .env 파일 환경 설정은 필요 없어서 설정 안함.
 
-### 작업 환경 구성 : Eslint, Prettier, Husky
+## 작업 환경 구성 : Eslint, Prettier, Husky
 
 Husky hook precommit 옵션을 설정하여
 
@@ -113,7 +106,7 @@ Husky hook precommit 옵션을 설정하여
 
 이후에 에러 없을 시 커밋할 수 있게 구성.
 
-### View - ViewModel 분리
+## View - ViewModel 분리
 
 > src/page는 뷰모델의 역할에만 집중.
 > src/components/xxComponent 는 뷰의 역할에만 집중.
@@ -130,7 +123,7 @@ Husky hook precommit 옵션을 설정하여
     1. 여러가지 DOM Attribute, event를 정의하고 수정할 때 사용할 수 있는 render, update 매서드를 제공. 가독성을 높임.
     2. Dom Attribute의 이전 속성을 비교해 변경시에만 업데이트 함.   ```ComponentBase.updateDomAttribute()```
 
-### UI 렌더링
+## UI 렌더링
 
 - ```<div id="app"></div>```에 페이지 DOM Node를 한번에 렌더링 하는 방식.
   - 페이지 클래스를 한번에 생성하지 않고 방문한 페이지들만 생성
@@ -166,7 +159,7 @@ Husky hook precommit 옵션을 설정하여
 
 | Statements                  | Branches                | Functions                 | Lines                |
 | --------------------------- | ----------------------- | ------------------------- | -------------------- |
-| ![Statements](https://img.shields.io/badge/Coverage-93.23%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/Coverage-78.08%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-90.7%25-brightgreen.svg) | ![Lines](https://img.shields.io/badge/Coverage-99.07%25-brightgreen.svg)    |
+| ![Statements](https://img.shields.io/badge/Coverage-93.7%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/Coverage-79.17%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-92.11%25-brightgreen.svg) | ![Lines](https://img.shields.io/badge/Coverage-99.03%25-brightgreen.svg)    |
 
 - 대상
   - components(CSS 효과 구현을 위한 ConfettiComponent는 제외)

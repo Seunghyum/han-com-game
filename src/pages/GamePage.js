@@ -45,14 +45,15 @@ class GamePage extends ReactiveComponentBase {
   }
 
   initEffects() {
-    this.setEffect((isStart) => $GameControlButton.updateState({ isStart }), [
+    this.setEffect(
+      (isStart) => $GameControlButton.updateState({ isStart }),
       'isStart',
-    ]);
-    this.setEffect((score) => $Score.update({ textContent: score }), ['score']);
-    this.setEffect((time) => $Time.update({ textContent: time }), ['time']);
+    );
+    this.setEffect((score) => $Score.update({ textContent: score }), 'score');
+    this.setEffect((time) => $Time.update({ textContent: time }), 'time');
     this.setEffect(
       (questionText) => $QuestionText.update({ textContent: questionText }),
-      ['questionText'],
+      'questionText',
     );
   }
 
@@ -101,9 +102,7 @@ class GamePage extends ReactiveComponentBase {
     else {
       this.setState({ isStart: true, questionText: 'Start!' });
       try {
-        const result = await getFetch(
-          'https://my-json-server.typicode.com/kakaopay-fe/resources/words',
-        );
+        const result = await getFetch();
         this.questions = result;
         this.setState({ score: result.length });
         this.setNextQuestion(0);
