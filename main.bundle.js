@@ -10744,7 +10744,7 @@ function historyRouter() {
 }
 
 function getPathLazy(pathName) {
-  alert('pathName : ', pathName);
+  console.log('pathName : ', pathName);
   if (!routesMemo[pathName]) routesMemo[pathName] = routeMap[pathName]();
   return routesMemo[pathName];
 }
