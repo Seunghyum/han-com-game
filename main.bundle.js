@@ -10745,6 +10745,7 @@ function historyRouter() {
 
 function getPathLazy(pathName) {
   var path = pathName.split('/han-com-game')[1];
+  console.log('path : ', path);
   if (!routesMemo[path]) routesMemo[path] = routeMap[path]();
   return routesMemo[path];
 }
