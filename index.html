@@ -1,8 +1,15 @@
-<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"/><title>Typing Game</title><script>(function(l) {
-    // 파싱 결과를 토대로 URI 내용을 대체한다
-    window.history.replaceState(null, null,
-      l.pathname.slice(0, -1) + (q.p || '') +
-      (q.q ? ('?' + q.q) : '') +
-      l.hash
-    );
-  }(window.location)</script><link rel="icon" href="assets/favicon.png"><script defer="defer" src="./main.bundle.js"></script><link href="./main.css" rel="stylesheet"></head><body><div id="app"></div></body></html>
+<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"/><title>Typing Game</title><style>body:before {
+        content: attr(message);
+      }</style><link rel="icon" href="assets/favicon.png"><script defer="defer" src="./main.bundle.js"></script><link href="./main.css" rel="stylesheet"></head><body><div id="app"></div><script>(function(){
+          var redirect = sessionStorage.redirect;
+          delete sessionStorage.redirect;
+          if (redirect && redirect != location.href) {
+            history.replaceState(null, null, redirect);
+            // REMOVE THIS - just showing the redirect route in the UI
+            document.body.setAttribute('message', 'This page was redirected by 404.html, from the route: ' + redirect);
+          }
+          else {
+            // REMOVE THIS - just showing the redirect route in the UI
+            document.body.setAttribute('message', 'This page was loaded directly from the index.html file');
+          }
+        })();</script></body></html>
